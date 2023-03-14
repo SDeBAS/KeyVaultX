@@ -14,5 +14,14 @@
     "mysql": "^2.18.1",
     "nodemon": "^2.0.21",
     "path": "^0.12.7"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SDeBAS/KeyVaultX.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SDeBAS/KeyVaultX/issues"
+  },
+  "homepage": "https://github.com/SDeBAS/KeyVaultX#readme"
 }

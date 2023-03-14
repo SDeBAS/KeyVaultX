@@ -42,9 +42,10 @@ app.get("/contact", function (req, res) {
     res.sendFile(path.join(__dirname + "/views/contact.html"))
 });
 
-app.get("/dashboard", function (req, res) {
-    res.sendFile(path.join(__dirname + "/views/dashboard.html"))
-});
+    app.get("/dashboard", function (req, res) {
+        res.sendFile(path.join(__dirname + "/views/dashboard.html"))
+    });
+
 
 
 //AUTHENTICATION
@@ -58,7 +59,8 @@ app.post("/login", encoder, function (req, res) {
         mysql.query("select * from admin where admin_email = ? and admin_password= ?", [email, password], function (err, results, fields) {
         if (results.length > 0) 
         {
-                res.redirect("/dashboard");
+            
+            res.redirect("/dashboard");
                 console.log(email, password);
             }
         else 

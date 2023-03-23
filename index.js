@@ -15,7 +15,7 @@ app.use(express.static('public'));
 
 //LINKS
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname + "/views/index.html"))
+    res.sendFile(path.join(__dirname + "/views/pindex.html"))
 });
 
 app.get("/home", function (req, res) {
@@ -78,7 +78,23 @@ app.post("/login", encoder, function (req, res) {
     
 });
 
+//CONTACT FORM INFO
 
+app.post("/contact", encoder, function (req, res) {
+
+    var email = req.body.email;
+    var name = req.body.name;
+    var regno = req.body.regno;
+    var message=req.body.message;
+    console.log(regno, name, email, message);
+
+    let qry2 = "insert into contactus values(?,?,?,?)";
+    mysql.query(qry2, [regno,name,email, message], (err, results) => {
+    res.redirect("/contact");
+
+    })
+    
+});
 
 
 

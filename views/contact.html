@@ -29,7 +29,7 @@
                 <nav id="header-main-menu">
                     <ul class="main-menu sm sm-clean">
                         <li>
-                            <a href="/">Home</a>
+                            <a href="/home">Home</a>
                         </li>
                         <li>
                             <a href="/about">About</a>
@@ -109,20 +109,26 @@
 
                         <div class="one_half last cfh">
                             <div class="contact-form">
+                                <form method="POST" class="contact-form">
                                 <p>
-                                    <input id="name" type="text" name="your-name" placeholder="Name">
+                                    <input id="regno" type="number" name="regno" placeholder="Registration Number">
                                 </p>
                                 <p>
-                                    <input id="contact-email" type="email" name="your-email" placeholder="Email">
+                                    <input id="name" type="text" name="name" placeholder="Name">
+                                </p>
+                                <p>
+                                    <input id="contact-email" type="email" name="email" placeholder="Email">
                                 </p>                                    
                                
                                 <p>
-                                    <textarea id="message" name="your-message" placeholder="Message"></textarea>
+                                    <textarea id="message" name="message" placeholder="Message"></textarea>
                                 </p>
                                
                                 <p class="contact-submit-holder">
                                     <input type="submit" value="SEND">
-                                </p>                                
+                                </p>
+                                </form> 
+                                                               
                             </div>                                                          
                         </div>
                         <div class="clear"></div>

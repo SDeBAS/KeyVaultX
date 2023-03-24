@@ -15,7 +15,6 @@
     "nodemon": "^2.0.21",
     "path": "^0.12.7"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SDeBAS/KeyVaultX.git"

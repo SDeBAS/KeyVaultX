@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 
+
 //CONSTANT DECLARATIONS
 const encoder = bodyParser.urlencoded();
 const app = express();
@@ -11,6 +12,7 @@ const mysql = require("./connection").con
 
 //DECLARING STATIC FILES
 app.use(express.static('public'));
+
 
 
 //LINKS
@@ -58,24 +60,69 @@ app.post("/login", encoder, function (req, res) {
 
     var email = req.body.email;
     var password = req.body.pass;
-   // var role = req.body.member_level;
-    
-        mysql.query("select * from admin where admin_email = ? and admin_password= ?", [email, password], function (err, results, fields) {
-        if (results.length > 0) 
-        {
-            
-            res.redirect("/dashboard");
-                console.log(email, password);
+    var users = req.body.users;
+    console.log(users,email,password);
+    if(users==="Admin")
+    {
+        mysql.query("select * from admin where email = ? and password= ?", [email, password], function (err, results, fields) {
+            if (results.length > 0) {
+
+                res.redirect("/dashboard");
+                console.log(email, password, users);
             }
-        else 
-        {
-                res.redirect("/login"); 
-                console.log(email, password);
+            else {
+                res.redirect("/login");
+                console.log(email, password, users);
                 console.log("Invalid credentials");
             }
             res.end();
         })
-    
+    }
+    else if (users === "Faculty") {
+        mysql.query("select * from faculty where email = ? and password= ?", [email, password], function (err, results, fields) {
+            if (results.length > 0) {
+
+                res.redirect("/dashboard");
+                console.log(email, password, users);
+            }
+            else {
+                res.redirect("/login");
+                console.log(email, password, users);
+                console.log("Invalid credentials");
+            }
+            res.end();
+        })
+    }
+    else if (users === "Student") {
+        mysql.query("select * from student where email = ? and password= ?", [email, password], function (err, results, fields) {
+            if (results.length > 0) {
+
+                res.redirect("/dashboard");
+                console.log(email, password, users);
+            }
+            else {
+                res.redirect("/login");
+                console.log(email, password, users);
+                console.log("Invalid credentials");
+            }
+            res.end();
+        })
+    }
+    /* mysql.query("select * from admin where email = ? and password= ?", [email, password], function (err, results, fields) {
+            if (results.length > 0) {
+
+                res.redirect("/dashboard");
+                console.log(email, password, users);
+            }
+            else {
+                res.redirect("/login");
+                console.log(email, password, users);
+                console.log("Invalid credentials");
+            }
+            res.end();
+        })
+
+    */
 });
 
 //CONTACT FORM INFO
@@ -90,7 +137,7 @@ app.post("/contact", encoder, function (req, res) {
 
     let qry2 = "insert into contactus values(?,?,?,?)";
     mysql.query(qry2, [regno,name,email, message], (err, results) => {
-    res.redirect("/contact");
+        res.redirect("/contact");
 
     })
     

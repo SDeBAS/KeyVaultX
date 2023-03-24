@@ -1283,13 +1283,25 @@ li.coco-gallery-item.b-w img {
 .contact-form input[type=password],
 .contact-form input[type=email], 
 .contact-form input[type=number],
-.contact-form textarea,
-.contact-form select {
+.contact-form textarea
+{
     border: 0;
     border-bottom: 2px solid;
     padding-top: 13px;
     padding-bottom: 13px;
     padding-left: 10px;
+    margin: 10px 0;
+    height: 28px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    line-height: 25px;
+}
+
+.contact-form select
+{
+     border: 0;
+    border-bottom: 2px solid;
     margin: 10px 0;
     height: 28px;
     font-size: 15px;

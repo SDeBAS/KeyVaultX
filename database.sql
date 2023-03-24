@@ -63,6 +63,16 @@ phno bigint
 );
 
 
+create table allkey
+(
+id int primary key,
+name varchar(255),
+department varchar(255),
+position int
+);
+
+
+
 /*MAIN TABLE VALUE INSERTION*/
 
 insert into admin values

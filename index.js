@@ -2,7 +2,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
-
+const session=require("express-session");
+const flash=require("connect-flash")
 
 //CONSTANT DECLARATIONS
 const encoder = bodyParser.urlencoded();
@@ -12,7 +13,14 @@ const mysql = require("./connection").con
 
 //DECLARING STATIC FILES
 app.use(express.static('public'));
-
+app.set('view engine', 'ejs');
+app.use(session({
+    secret : "KeyVaultX",
+    cookie : {maxAge: 60000},
+    resave : false,
+    saveUninitialized: false
+}));
+app.use(flash());
 
 
 //LINKS
@@ -37,15 +45,15 @@ app.get("/features", function (req, res) {
 });
 
 app.get("/login", function (req, res) {
-    res.sendFile(path.join(__dirname + "/views/login.html"))
+    res.render(path.join(__dirname + "/views/login"))
 });
 
 app.get("/request", function (req, res) {
-    res.sendFile(path.join(__dirname + "/views/request.html"))
+    res.render(path.join(__dirname + "/views/request"), { message: req.flash("message") })
 });
 
 app.get("/contact", function (req, res) {
-    res.sendFile(path.join(__dirname + "/views/contact.html"))
+    res.render(path.join(__dirname + "/views/contact"),{ message : req.flash("message")})
 });
 
     app.get("/dashboard", function (req, res) {
@@ -127,7 +135,8 @@ app.post("/request", encoder, function (req, res) {
 
     let qry2 = "insert into request values(?,?,?,?,?,?,?,?)";
     mysql.query(qry2, [regno, user,name,dept,post, email,pass,phno], (err, results) => {
-        res.redirect("/login");
+        req.flash("message", " Your Request is recorded successfully");
+        res.redirect("/request");
 
     })
 
@@ -146,6 +155,7 @@ app.post("/contact", encoder, function (req, res) {
 
     let qry2 = "insert into contactus values(?,?,?,?)";
     mysql.query(qry2, [regno,name,email, message], (err, results) => {
+        req.flash("message", " Your Response is recorded successfully");
         res.redirect("/contact");
 
     })

@@ -71,6 +71,36 @@ department varchar(255),
 position int
 );
 
+create table rfidperm
+(
+id int,
+lvl int,
+userdate date,
+usertime time
+);
+
+/* ADDING TRIGGERS */
+
+delimiter //
+Create Trigger after_insert_admin  
+AFTER INSERT ON admin FOR EACH ROW  
+BEGIN  
+INSERT INTO rfidperm VALUES (new.admin_id, 3,CURDATE(), CURTIME());  
+END //  
+
+delimiter //
+Create Trigger after_insert_faculty
+AFTER INSERT ON faculty FOR EACH ROW  
+BEGIN  
+INSERT INTO rfidperm VALUES (new.faculty_id, 2,CURDATE(), CURTIME());  
+END //
+
+delimiter //
+Create Trigger after_insert_student
+AFTER INSERT ON student FOR EACH ROW  
+BEGIN  
+INSERT INTO rfidperm VALUES (new.student_id, 1,CURDATE(), CURTIME());  
+END //  
 
 
 /*MAIN TABLE VALUE INSERTION*/

@@ -108,21 +108,6 @@ app.post("/login", encoder, function (req, res) {
             res.end();
         })
     }
-    /* mysql.query("select * from admin where email = ? and password= ?", [email, password], function (err, results, fields) {
-            if (results.length > 0) {
-
-                res.redirect("/dashboard");
-                console.log(email, password, users);
-            }
-            else {
-                res.redirect("/login");
-                console.log(email, password, users);
-                console.log("Invalid credentials");
-            }
-            res.end();
-        })
-
-    */
 });
 
 //CONTACT FORM INFO

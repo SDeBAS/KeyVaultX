@@ -1,0 +1,26 @@
+{
+  "name": "lm35-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@serialport/parser-readline": "^10.5.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "debug": "^4.3.4",
+    "express": "^4.18.2",
+    "ms": "^2.1.2",
+    "node-addon-api": "^5.1.0",
+    "node-gyp-build": "^4.6.0",
+    "nodemon": "^2.0.22",
+    "serialport": "^10.5.0",
+    "socket.io": "^4.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js COM3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

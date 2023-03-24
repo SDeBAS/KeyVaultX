@@ -22,5 +22,6 @@
   "bugs": {
     "url": "https://github.com/SDeBAS/KeyVaultX/issues"
   },
-  "homepage": "https://github.com/SDeBAS/KeyVaultX#readme"
+  "homepage": "https://github.com/SDeBAS/KeyVaultX#readme",
+  "devDependencies": {}
 }

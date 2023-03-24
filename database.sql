@@ -50,6 +50,18 @@ email varchar(255),
 message varchar(255)
 );
 
+create table request
+(
+id int primary key,
+user_type varchar(255),
+name varchar(255),
+department varchar(255),
+section varchar(255),
+email varchar(255),
+password varchar(255),
+phno bigint
+);
+
 
 /*MAIN TABLE VALUE INSERTION*/
 

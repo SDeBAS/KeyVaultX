@@ -110,6 +110,30 @@ app.post("/login", encoder, function (req, res) {
     }
 });
 
+
+//REQUEST FORM
+
+app.post("/request", encoder, function (req, res) {
+
+    var email = req.body.email;
+    var name = req.body.name;
+    var regno = req.body.regno;
+    var user = req.body.users;
+    var dept = req.body.depart;
+    var post=req.body.post;
+    var phno=req.body.phno;
+    var pass = req.body.pass;
+    console.log(user,regno, name, email,pass,dept,post,phno);
+
+    let qry2 = "insert into request values(?,?,?,?,?,?,?,?)";
+    mysql.query(qry2, [regno, user,name,dept,post, email,pass,phno], (err, results) => {
+        res.redirect("/login");
+
+    })
+
+});
+
+
 //CONTACT FORM INFO
 
 app.post("/contact", encoder, function (req, res) {

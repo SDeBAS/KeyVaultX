@@ -4,11 +4,16 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const session=require("express-session");
 const flash=require("connect-flash")
+const { SerialPort } = require('serialport')
+const { ReadlineParser } = require('@serialport/parser-readline')
+const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+var cors = require('cors')
+
 
 //CONSTANT DECLARATIONS
 const encoder = bodyParser.urlencoded();
 const app = express();
-const port = 4500;
+const port2 = 4500;
 const mysql = require("./connection").con
 
 //DECLARING STATIC FILES
@@ -21,6 +26,8 @@ app.use(session({
     saveUninitialized: false
 }));
 app.use(flash());
+app.use(cors())
+app.use(express.json())
 
 
 //LINKS
@@ -162,13 +169,50 @@ app.post("/contact", encoder, function (req, res) {
     
 });
 
+//RFID
+const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
+parser.on('open',function(){
+    console.log('connection is opened');
+})
+
+app.listen(5000, ()=>{
+    console.log(" USB Server is up at 5000");
+});
+
+var num = false
+
+parser.on('data',function(data){
+    num = data
+    console.log(num)
+
+    mysql.query("select lvl from rfidperm where id = ?", [num], function (err, results, fields) {
+        if (results.length > 0) {
+
+            // res.redirect("/dashboard");
+            console.log(results[0].lvl);
+            console.log("found");
+        }
+        else {
+            console.log("Not found")
+        }
+    })
 
 
+});
+
+app.get("/",(req,res)=>{
+    res.send(num)
+})
+
+
+parser.on('error',function(err){
+    console.log(err.message);
+});
 
 //PORT
-app.listen(port, (err) => {
+app.listen(port2, (err) => {
     if (err)
         throw err
     else
-        console.log("Server running at %d port", port);
+        console.log("Server running at %d port", port2);
 });

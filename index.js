@@ -17,6 +17,7 @@ const port2 = 4500;
 const mysql = require("./connection").con
 
 //DECLARING STATIC FILES
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(session({
@@ -31,6 +32,8 @@ app.use(express.json())
 
 
 //LINKS
+
+
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname + "/views/pindex.html"))
 });
@@ -170,7 +173,7 @@ app.post("/contact", encoder, function (req, res) {
 });
 
 //RFID
-const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
+const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));
 parser.on('open',function(){
     console.log('connection is opened');
 })
@@ -179,31 +182,28 @@ app.listen(5000, ()=>{
     console.log(" USB Server is up at 5000");
 });
 
-var num = false
-
 parser.on('data',function(data){
-    num = data
+   num = data
     console.log(num)
+    level(num);
+    return;
+});
+
+function level(num)
+{
 
     mysql.query("select lvl from rfidperm where id = ?", [num], function (err, results, fields) {
         if (results.length > 0) {
 
-            // res.redirect("/dashboard");
             console.log(results[0].lvl);
             console.log("found");
         }
         else {
             console.log("Not found")
+            console.log(results);
         }
     })
-
-
-});
-
-app.get("/",(req,res)=>{
-    res.send(num)
-})
-
+}
 
 parser.on('error',function(err){
     console.log(err.message);

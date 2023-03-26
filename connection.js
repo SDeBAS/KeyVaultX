@@ -1,6 +1,8 @@
 const mysql = require("mysql");
 
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
+    connectionLimit: 100, //important
+    multipleStatements : true,
     host: "localhost",
     user: "root",
     password: "debanjan",
@@ -9,7 +11,7 @@ const connection = mysql.createConnection({
 
 //connect to database
 
-connection.connect(function (error) {
+connection.getConnection(function (error) {
     if (error) {
         throw error;
     }

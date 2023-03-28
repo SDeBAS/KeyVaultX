@@ -2,8 +2,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
-const session=require("express-session");
-const flash=require("connect-flash")
+const session = require("express-session");
+const flash = require("connect-flash")
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
@@ -21,9 +21,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(session({
-    secret : "KeyVaultX",
-    cookie : {maxAge: 60000},
-    resave : false,
+    secret: "KeyVaultX",
+    cookie: { maxAge: 60000 },
+    resave: false,
     saveUninitialized: false
 }));
 app.use(flash());
@@ -63,12 +63,12 @@ app.get("/request", function (req, res) {
 });
 
 app.get("/contact", function (req, res) {
-    res.render(path.join(__dirname + "/views/contact"),{ message : req.flash("message")})
+    res.render(path.join(__dirname + "/views/contact"), { message: req.flash("message") })
 });
 
-    app.get("/dashboard", function (req, res) {
-        res.sendFile(path.join(__dirname + "/views/dashboard.html"))
-    });
+app.get("/dashboard", function (req, res) {
+    res.sendFile(path.join(__dirname + "/views/dashboard.html"))
+});
 
 
 
@@ -79,9 +79,8 @@ app.post("/login", encoder, function (req, res) {
     var email = req.body.email;
     var password = req.body.pass;
     var users = req.body.users;
-    console.log(users,email,password);
-    if(users==="Admin")
-    {
+    console.log(users, email, password);
+    if (users === "Admin") {
         mysql.query("select * from admin where email = ? and password= ?", [email, password], function (err, results, fields) {
             if (results.length > 0) {
 
@@ -138,13 +137,13 @@ app.post("/request", encoder, function (req, res) {
     var regno = req.body.regno;
     var user = req.body.users;
     var dept = req.body.depart;
-    var post=req.body.post;
-    var phno=req.body.phno;
+    var post = req.body.post;
+    var phno = req.body.phno;
     var pass = req.body.pass;
-    console.log(user,regno, name, email,pass,dept,post,phno);
+    console.log(user, regno, name, email, pass, dept, post, phno);
 
     let qry2 = "insert into request values(?,?,?,?,?,?,?,?)";
-    mysql.query(qry2, [regno, user,name,dept,post, email,pass,phno], (err, results) => {
+    mysql.query(qry2, [regno, user, name, dept, post, email, pass, phno], (err, results) => {
         req.flash("message", " Your Request is recorded successfully");
         res.redirect("/request");
 
@@ -160,52 +159,50 @@ app.post("/contact", encoder, function (req, res) {
     var email = req.body.email;
     var name = req.body.name;
     var regno = req.body.regno;
-    var message=req.body.message;
+    var message = req.body.message;
     console.log(regno, name, email, message);
 
     let qry2 = "insert into contactus values(?,?,?,?)";
-    mysql.query(qry2, [regno,name,email, message], (err, results) => {
+    mysql.query(qry2, [regno, name, email, message], (err, results) => {
         req.flash("message", " Your Response is recorded successfully");
         res.redirect("/contact");
 
     })
-    
+
 });
 
 //RFID
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));
-parser.on('open',function(){
+parser.on('open', function () {
     console.log('connection is opened');
 })
 
-app.listen(5000, ()=>{
+app.listen(5000, () => {
     console.log(" USB Server is up at 5000");
 });
 
-parser.on('data',function(data){
-   num = data
+var num = 0;
+
+parser.on('data', function (data) {
+    num = Number(data.slice(-8))
     console.log(num)
-    level(num);
-    return;
-});
-
-function level(num)
-{
-
-    mysql.query("select lvl from rfidperm where id = ?", [num], function (err, results, fields) {
+    mysql.query("SELECT lvl from rfidperm where id = ?", [num], function (err, results, fields) {
         if (results.length > 0) {
 
+            console.log("User Authenticated");
             console.log(results[0].lvl);
-            console.log("found");
+           
+
         }
         else {
-            console.log("Not found")
-            console.log(results);
+            console.log("User Not Found")
         }
     })
-}
+});
 
-parser.on('error',function(err){
+
+
+parser.on('error', function (err) {
     console.log(err.message);
 });
 

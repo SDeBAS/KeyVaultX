@@ -67,11 +67,11 @@ app.get("/contact", function (req, res) {
 });
 
 app.get("/adashboard", function (req, res) {
-    res.render(path.join(__dirname + "/views/admindashboard"))
+    res.render(path.join(__dirname + "/views/admin_dashboard/admindashboard"))
 });
 
 app.get("/vdashboard", function (req, res) {
-    res.render(path.join(__dirname + "/views/viewdashboard"))
+    res.render(path.join(__dirname + "/views/view_dashboard/viewdashboard"))
 });
 
 
@@ -87,11 +87,17 @@ app.post("/login", encoder, function (req, res) {
    
     if (users === "Admin") {
         mysql.query("select * from admin where admin_email = ? and admin_password= ?", [email, password], function (err, results, fields) {
-            if (results.length > 0) {
+            if (results.length > 0) 
+            {
 
-                res.redirect("/adashboard");
-                console.log(email, password, users);
-            }
+                mysql.query("Select admin_name from admin where admin_email = ?", [email], function (err, results, fields) {
+                    if (results.length > 0) {
+
+                        console.log(results[0].admin_name);
+                    }
+            });
+           res.redirect("/adashboard");
+             }
             else {
                 res.redirect("/login");
                 console.log(email, password, users);
@@ -105,6 +111,8 @@ app.post("/login", encoder, function (req, res) {
             if (results.length > 0) {
 
                 res.redirect("/vdashboard");
+                var name = mysql.query("select faculty_name from faculty where faculty_email=?", [email]);
+                req.flash("user", name);
                 console.log(email, password, users);
             }
             else {
@@ -121,6 +129,8 @@ app.post("/login", encoder, function (req, res) {
             if (results.length > 0) {
 
                 res.redirect("/vdashboard");
+                var name= mysql.query("select student_name from student where student_email=?",[email]);
+                req.flash("user", name);
                 console.log(email, password, users);
             }
             else {

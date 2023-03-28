@@ -55,7 +55,7 @@ app.get("/features", function (req, res) {
 });
 
 app.get("/login", function (req, res) {
-    res.render(path.join(__dirname + "/views/login"))
+    res.sendFile(path.join(__dirname + "/views/login.html")) 
 });
 
 app.get("/request", function (req, res) {
@@ -66,8 +66,12 @@ app.get("/contact", function (req, res) {
     res.render(path.join(__dirname + "/views/contact"), { message: req.flash("message") })
 });
 
-app.get("/dashboard", function (req, res) {
-    res.sendFile(path.join(__dirname + "/views/dashboard.html"))
+app.get("/adashboard", function (req, res) {
+    res.render(path.join(__dirname + "/views/admindashboard"))
+});
+
+app.get("/vdashboard", function (req, res) {
+    res.render(path.join(__dirname + "/views/viewdashboard"))
 });
 
 
@@ -80,11 +84,12 @@ app.post("/login", encoder, function (req, res) {
     var password = req.body.pass;
     var users = req.body.users;
     console.log(users, email, password);
+   
     if (users === "Admin") {
-        mysql.query("select * from admin where email = ? and password= ?", [email, password], function (err, results, fields) {
+        mysql.query("select * from admin where admin_email = ? and admin_password= ?", [email, password], function (err, results, fields) {
             if (results.length > 0) {
 
-                res.redirect("/dashboard");
+                res.redirect("/adashboard");
                 console.log(email, password, users);
             }
             else {
@@ -96,10 +101,10 @@ app.post("/login", encoder, function (req, res) {
         })
     }
     else if (users === "Faculty") {
-        mysql.query("select * from faculty where email = ? and password= ?", [email, password], function (err, results, fields) {
+        mysql.query("select * from faculty where faculty_email = ? and faculty_password= ?", [email, password], function (err, results, fields) {
             if (results.length > 0) {
 
-                res.redirect("/dashboard");
+                res.redirect("/vdashboard");
                 console.log(email, password, users);
             }
             else {
@@ -110,11 +115,12 @@ app.post("/login", encoder, function (req, res) {
             res.end();
         })
     }
+
     else if (users === "Student") {
-        mysql.query("select * from student where email = ? and password= ?", [email, password], function (err, results, fields) {
+        mysql.query("select * from student where student_email = ? and student_password= ?", [email, password], function (err, results, fields) {
             if (results.length > 0) {
 
-                res.redirect("/dashboard");
+                res.redirect("/vdashboard");
                 console.log(email, password, users);
             }
             else {
@@ -182,22 +188,43 @@ app.listen(5000, () => {
 });
 
 var num = 0;
+var backr;
 
 parser.on('data', function (data) {
-    num = Number(data.slice(-8))
-    console.log(num)
-    mysql.query("SELECT lvl from rfidperm where id = ?", [num], function (err, results, fields) {
-        if (results.length > 0) {
+    
+    back=data
+    var reg=0;
+    var ldr=0;
+    if (data.slice(-8,-6) != 22 || data.slice(-8,-6) != 22 )
+    {
+        ldr = Number(data.slice(-3));
+    }
+    else
+    {
+        reg = Number(back.slice(-8));
+        backr=reg;
+    }
+    if(backr>0 && ldr>0)
+    {
 
-            console.log("User Authenticated");
-            console.log(results[0].lvl);
-           
+        console.log(backr)
+        console.log(ldr)
+        mysql.query("SELECT lvl from rfidperm where id = ?", [backr], function (err, results, fields) {
+            if (results.length > 0) {
 
-        }
-        else {
-            console.log("User Not Found")
-        }
-    })
+                console.log("User Authenticated");
+                console.log(results[0].lvl);
+                console.log("\n")
+
+
+            }
+            else {
+                console.log("User Not Found")
+                console.log("\n")
+
+            }
+        })
+    }
 });
 
 

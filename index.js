@@ -80,6 +80,168 @@ app.get("/adashboard", function (req, res) {
     res.render(path.join(__dirname + "/views/admin_dashboard/admindashboard"))
 });
 
+app.get("/adashboard/allusers", function (req, res) {
+    let qry = "select * from users";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboarduser"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/admin", function (req, res) {
+    let qry = "select * from admin";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardadmin"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/faculty", function (req, res) {
+    let qry = "select * from faculty";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardfaculty"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/student", function (req, res) {
+    let qry = "select * from student";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardstudent"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/rfidperm", function (req, res) {
+    let qry = "select * from rfidperm";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardrfidperm"), { data: results })
+        }
+    });
+});
+
+
+
+app.get("/adashboard/alerts", function (req, res) {
+    let qry = "select * from alerts";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardalerts"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/vault", function (req, res) {
+    let qry = "select * from vault";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardvault"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/addkeys", function (req, res) {
+    let qry = "select * from addkeys";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardaddkeys"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/removekeys", function (req, res) {
+    let qry = "select * from removekeys";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardremovekeys"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/viewkeys", function (req, res) {
+    let qry = "select * from viewkeys";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardaddkeys"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/alltransactions", function (req, res) {
+    let qry = "select * from alltransactions";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardalltransactions"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/keystaken", function (req, res) {
+    let qry = "select * from keystaken";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardkeystaken"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/keysreturned", function (req, res) {
+    let qry = "select * from keysreturned";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardkeysreturned"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/overdue", function (req, res) {
+    let qry = "select * from overduekeys";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardoverduekeys"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/contact", function (req, res) {
+    let qry = "select * from contactus";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardcontact"), { data: results })
+        }
+    });
+});
+
+app.get("/adashboard/register", function (req, res) {
+    let qry = "select * from request";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardregister"), { data: results })
+        }
+    });
+});
+
 app.get("/vdashboard", function (req, res) {
     res.render(path.join(__dirname + "/views/view_dashboard/viewdashboard"))
 });
@@ -171,7 +333,7 @@ app.post("/login", encoder, function (req, res) {
     }
 
     else if (users === "Student") {
-        mysql.query("select * from student where student_email = ? and student_password= ?", [email, password], function (err, results, fields) {
+        mysql.query("select * from student where student_email = ? and v_password= ?", [email, password], function (err, results, fields) {
             if (results.length > 0) {
 
                 res.redirect("/vdashboard");

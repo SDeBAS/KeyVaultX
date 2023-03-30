@@ -47,86 +47,7 @@
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
-          </a><!-- End Notification Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-            <li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
-            </li>
-
-          </ul><!-- End Notification Dropdown Items -->
-            
-          </a><!-- End Notification Icon -->
-
-
-        </li><!-- End Notification Nav -->
-
         <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-key"></i>
 
         <i class="bi bi-list toggle-sidebar-btn"></i>
 
@@ -161,42 +82,33 @@
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-general.html">
-              <i class="bi bi-circle"></i><span>User</span>
+            <a href="/adashboard/allusers">
+              <i class="bi bi-circle"></i><span>All Users</span>
             </a>
           </li>
           <li>
-            <a href="tables-data.html">
-              <i class="bi bi-circle"></i><span>Keys</span>
+            <a href="/adashboard/admin">
+              <i class="bi bi-circle"></i><span>Admin</span>
             </a>
           </li>
+          <li>
+            <a href="/adashboard/faculty">
+              <i class="bi bi-circle"></i><span>Faculty</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/student">
+              <i class="bi bi-circle"></i><span>Student</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/rfidperm">
+              <i class="bi bi-circle"></i><span>RFID Permissions</span>
+            </a>
+          </li>
+          
         </ul>
       </li><!-- End Tables Nav -->
-
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="forms-elements.html">
-              <i class="bi bi-circle"></i><span> All Transactions</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-layouts.html">
-              <i class="bi bi-circle"></i><span>Recent Transactions</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-editors.html">
-              <i class="bi bi-circle"></i><span>Old Transactions</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Forms Nav -->
-
       
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
@@ -204,17 +116,12 @@
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="charts-chartjs.html">
+            <a href="/adashboard/alerts">
               <i class="bi bi-circle"></i><span>Alerts</span>
             </a>
           </li>
           <li>
-            <a href="charts-apexcharts.html">
-              <i class="bi bi-circle"></i><span>Overtime Access</span>
-            </a>
-          </li>
-          <li>
-            <a href="charts-echarts.html">
+            <a href="/adashboard/vault">
               <i class="bi bi-circle"></i><span>Vault Condition</span>
             </a>
           </li>
@@ -227,42 +134,71 @@
         </a>
         <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="icons-bootstrap.html">
+            <a href="/adashboard/addkeys">
               <i class="bi bi-circle"></i><span>Add Keys</span>
             </a>
           </li>
           <li>
-            <a href="icons-remix.html">
+            <a href="/adashboard/removekeys">
               <i class="bi bi-circle"></i><span>Remove Keys</span>
             </a>
           </li>
           <li>
-            <a href="icons-boxicons.html">
+            <a href="/adashboard/viewkeys">
               <i class="bi bi-circle"></i><span>View All Keys</span>
             </a>
           </li>
         </ul>
       </li><!-- End Icons Nav -->
 
+       <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Track Keys</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/adashboard/alltransactions">
+              <i class="bi bi-circle"></i><span> All Transactions</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/keystaken">
+              <i class="bi bi-circle"></i><span>Keys Taken</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/keysreturned">
+              <i class="bi bi-circle"></i><span>Keys Returned</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/overdue">
+              <i class="bi bi-circle"></i><span>Overdue Keys</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Forms Nav -->
+
+
       <li class="nav-heading">Pages</li>
 
       
       <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-contact.html">
+        <a class="nav-link collapsed" href="/adashboard/contact">
           <i class="bi bi-envelope"></i>
           <span>Contact</span>
         </a>
       </li><!-- End Contact Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-register.html">
+        <a class="nav-link collapsed" href="/adashboard/register">
           <i class="bi bi-card-list"></i>
-          <span>Register Users</span>
+          <span>Register New Users</span>
         </a>
       </li><!-- End Register Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.html">
+        <a class="nav-link collapsed" href="/login">
           <i class="bi bi-box-arrow-in-right"></i>
           <span>Logout</span>
         </a>

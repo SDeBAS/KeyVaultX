@@ -9,6 +9,8 @@ const { ReadlineParser } = require('@serialport/parser-readline')
 const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
 var cors = require('cors')
 
+//--------------------------------------------------------------------------------------------------------------------------//
+
 
 //CONSTANT DECLARATIONS
 const encoder = bodyParser.urlencoded();
@@ -16,10 +18,16 @@ const app = express();
 const port2 = 4500;
 const mysql = require("./connection").con
 
+
+//--------------------------------------------------------------------------------------------------------------------------//
+
+
 //DECLARING STATIC FILES
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
+app.set("view engine", "hbs");
+
 app.use(session({
     secret: "KeyVaultX",
     cookie: { maxAge: 60000 },
@@ -29,6 +37,8 @@ app.use(session({
 app.use(flash());
 app.use(cors())
 app.use(express.json())
+
+//--------------------------------------------------------------------------------------------------------------------------//
 
 
 //LINKS
@@ -75,9 +85,46 @@ app.get("/vdashboard", function (req, res) {
 });
 
 
+app.get("/vdashboard/User", function (req, res) {
+
+    let qry = "select * from admin";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/view_dashboard/viewdashboarduser"), { data: results })
+        }
+    });  
+});
+
+app.get("/vdashboard/Keys", function (req, res) {
+    let qry = "select * from allkey";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/view_dashboard/viewdashboardkeys"), { data: results })
+        }
+    });
+});
+
+app.get("/vdashboard/Contact", function (req, res) {
+    let qry = "select * from contactus";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/view_dashboard/viewdashboardcontact"), { data: results })
+        }
+    });
+});
+
+
+
+
+//--------------------------------------------------------------------------------------------------------------------------//
+
 
 //AUTHENTICATION
 
+var name='';
 app.post("/login", encoder, function (req, res) {
 
     var email = req.body.email;
@@ -110,9 +157,8 @@ app.post("/login", encoder, function (req, res) {
         mysql.query("select * from faculty where faculty_email = ? and faculty_password= ?", [email, password], function (err, results, fields) {
             if (results.length > 0) {
 
+                name = mysql.query("select faculty_name from faculty where faculty_email=?", [email]);
                 res.redirect("/vdashboard");
-                var name = mysql.query("select faculty_name from faculty where faculty_email=?", [email]);
-                req.flash("user", name);
                 console.log(email, password, users);
             }
             else {
@@ -129,8 +175,6 @@ app.post("/login", encoder, function (req, res) {
             if (results.length > 0) {
 
                 res.redirect("/vdashboard");
-                var name= mysql.query("select student_name from student where student_email=?",[email]);
-                req.flash("user", name);
                 console.log(email, password, users);
             }
             else {
@@ -142,6 +186,9 @@ app.post("/login", encoder, function (req, res) {
         })
     }
 });
+
+
+//--------------------------------------------------------------------------------------------------------------------------//
 
 
 //REQUEST FORM
@@ -167,6 +214,8 @@ app.post("/request", encoder, function (req, res) {
 
 });
 
+//--------------------------------------------------------------------------------------------------------------------------//
+
 
 //CONTACT FORM INFO
 
@@ -186,6 +235,9 @@ app.post("/contact", encoder, function (req, res) {
     })
 
 });
+
+//--------------------------------------------------------------------------------------------------------------------------//
+
 
 //RFID
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));
@@ -243,6 +295,9 @@ parser.on('error', function (err) {
     console.log(err.message);
 });
 
+//--------------------------------------------------------------------------------------------------------------------------//
+
+
 //PORT
 app.listen(port2, (err) => {
     if (err)
@@ -250,3 +305,8 @@ app.listen(port2, (err) => {
     else
         console.log("Server running at %d port", port2);
 });
+
+
+//--------------------------------------------------------------------------------------------------------------------------//
+
+//VIEW DASHBOARD

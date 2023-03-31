@@ -157,6 +157,16 @@ name varchar(255),
 department varchar(255),
 position int
 );
+select * from allkey;
+
+
+create table alltransactions
+(
+id int,
+name varchar(255),
+key_id int,
+status varchar(255)
+);
 
 create table rfidperm
 (
@@ -167,3 +177,33 @@ usertime time
 );
 drop table rfidperm;
 select * from rfidperm;
+
+
+
+create table users
+(
+id int,
+Name varchar(255),
+user_type varchar(255),
+department varchar(255),
+key_id int,
+key_name varchar(255),
+Transaction_Date date,
+Transaction_Time time,
+email varchar(255),
+phno bigint
+);
+
+create table alerts
+(
+id int primary key,
+name varchar(255),
+key_id int,
+key_name varchar(255),
+transaction_date date,
+time_taken time,
+duration time,
+phno bigint,
+message varchar(255)
+);
+

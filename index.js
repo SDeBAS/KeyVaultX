@@ -6,7 +6,7 @@ const session = require("express-session");
 const flash = require("connect-flash")
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
-const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+//const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
 var cors = require('cors')
 
 //--------------------------------------------------------------------------------------------------------------------------//
@@ -153,31 +153,67 @@ app.get("/adashboard/vault", function (req, res) {
 });
 
 app.get("/adashboard/addkeys", function (req, res) {
-    let qry = "select * from addkeys";
-    mysql.query(qry, (err, results) => {
-        if (err) throw err
+    res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardaddkeys"))
+});
+
+app.get("/addkeys", function (req, res) {
+    
+    // fetching data from form
+    const { id, name, department, position} = req.query
+
+    // Sanitization XSS...
+    let qry = "select * from allkey where id=? or name=?";
+    mysql.query(qry, [id, name], (err, results) => {
+        if (err)
+            throw err
         else {
-            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardaddkeys"), { data: results })
+
+            if (results.length > 0) {
+                res.render("add", { checkmesg: true })
+            } else {
+
+                // insert query
+                let qry2 = "insert into allkey values(?,?,?,?)";
+                mysql.query(qry2, [id, name, department, position], (err, results) => {
+                    if (results.affectedRows > 0) {
+                        res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardaddkeys"), { mesg: true })
+                    }
+                })
+            }
         }
-    });
+    })
 });
 
 app.get("/adashboard/removekeys", function (req, res) {
-    let qry = "select * from removekeys";
-    mysql.query(qry, (err, results) => {
+    res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardremovekeys"))
+
+});
+app.get("/removekeys", (req, res) => {
+
+    const { position } = req.query;
+
+    let qry = "delete from allkey where position=?";
+    mysql.query(qry, [position], (err, results) => {
         if (err) throw err
         else {
-            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardremovekeys"), { data: results })
+            if (results.affectedRows > 0) {
+                res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardremovekeys"), { mesg1: true})
+            } else {
+
+                res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardremovekeys"), { mesg1: false})
+
+            }
+
         }
     });
 });
 
 app.get("/adashboard/viewkeys", function (req, res) {
-    let qry = "select * from viewkeys";
+    let qry = "select * from allkey";
     mysql.query(qry, (err, results) => {
         if (err) throw err
         else {
-            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardaddkeys"), { data: results })
+            res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardviewkeys"), { data: results })
         }
     });
 });
@@ -400,7 +436,7 @@ app.post("/contact", encoder, function (req, res) {
 
 //--------------------------------------------------------------------------------------------------------------------------//
 
-
+/*
 //RFID
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));
 parser.on('open', function () {
@@ -456,6 +492,7 @@ parser.on('data', function (data) {
 parser.on('error', function (err) {
     console.log(err.message);
 });
+*/
 
 //--------------------------------------------------------------------------------------------------------------------------//
 

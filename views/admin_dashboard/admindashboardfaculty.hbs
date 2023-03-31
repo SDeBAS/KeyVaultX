@@ -74,7 +74,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="/dashboard">
+        <a class="nav-link " href="/adashboard">
           <i class="bi bi-grid"></i>
           <span>Admin Dashboard</span>
         </a>
@@ -214,11 +214,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Faculty</h1>
+      <h1>Student</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/adashboard">Dashboard</a></li>
-          <li class="breadcrumb-item active">Faculty</li>
+          <li class="breadcrumb-item"><a href="/vdashboard">Dashboard</a></li>
+          <li class="breadcrumb-item active">Student</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -236,21 +236,10 @@
             <div class="col-12">
               <div class="card recent-sales overflow-auto">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
+               
 
                 <div class="card-body">
-                  <h5 class="card-title">All Transactions <span>| Today</span></h5>
+                  <h5 class="card-title">All Records </h5>
 
                   <table class="table table-borderless datatable">
                     
@@ -272,7 +261,7 @@
                         <th scope="row"><a href="#">{{faculty_id}}</a></th>
                         <td><a href="#" class="text-primary">{{faculty_name}}</a></td>
                         <td>{{faculty_department}}</td>
-                        <td>{{faculty_position}}</td>
+                        <td>{{faculty_section}}</td>
                         <td>{{faculty_email}}</td>
                         <td>{{faculty_password}}</td>
                         <td><span class="badge bg-danger">{{faculty_phno}}</span></td>

@@ -69,14 +69,14 @@
   </header><!-- End Header -->
 
   <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
+<aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="/vdashboard">
+        <a class="nav-link " href="/adashboard">
           <i class="bi bi-grid"></i>
-          <span>View Dashboard</span>
+          <span>Admin Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
 
@@ -86,38 +86,118 @@
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="/vdashboard/User">
-              <i class="bi bi-circle"></i><span>User</span>
+            <a href="/adashboard/allusers">
+              <i class="bi bi-circle"></i><span>All Users</span>
             </a>
           </li>
           <li>
-            <a href="/vdashboard/Keys">
-              <i class="bi bi-circle"></i><span>Keys</span>
+            <a href="/adashboard/admin">
+              <i class="bi bi-circle"></i><span>Admin</span>
             </a>
           </li>
           <li>
-            <a href="/vdashboard/Contact">
-              <i class="bi bi-circle"></i><span>Contact Us</span>
+            <a href="/adashboard/faculty">
+              <i class="bi bi-circle"></i><span>Faculty</span>
             </a>
           </li>
-
+          <li>
+            <a href="/adashboard/student">
+              <i class="bi bi-circle"></i><span>Student</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/rfidperm">
+              <i class="bi bi-circle"></i><span>RFID Permissions</span>
+            </a>
+          </li>
+          
         </ul>
       </li><!-- End Tables Nav -->
-
-
-      
       
       <li class="nav-item">
-        <a class="nav-link collapsed" href="/contact">
+        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-bar-chart"></i><span>Notifications</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/adashboard/alerts">
+              <i class="bi bi-circle"></i><span>Alerts</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/vault">
+              <i class="bi bi-circle"></i><span>Vault Condition</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Charts Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-gem"></i><span>Manage Keys</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/adashboard/addkeys">
+              <i class="bi bi-circle"></i><span>Add Keys</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/removekeys">
+              <i class="bi bi-circle"></i><span>Remove Keys</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/viewkeys">
+              <i class="bi bi-circle"></i><span>View All Keys</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Icons Nav -->
+
+       <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>Track Keys</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="/adashboard/alltransactions">
+              <i class="bi bi-circle"></i><span> All Transactions</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/keystaken">
+              <i class="bi bi-circle"></i><span>Keys Taken</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/keysreturned">
+              <i class="bi bi-circle"></i><span>Keys Returned</span>
+            </a>
+          </li>
+          <li>
+            <a href="/adashboard/overdue">
+              <i class="bi bi-circle"></i><span>Overdue Keys</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Forms Nav -->
+
+
+      <li class="nav-heading">Pages</li>
+
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="/adashboard/contact">
           <i class="bi bi-envelope"></i>
           <span>Contact</span>
         </a>
       </li><!-- End Contact Page Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="/request">
+        <a class="nav-link collapsed" href="/adashboard/register">
           <i class="bi bi-card-list"></i>
-          <span>Register Users</span>
+          <span>Register New Users</span>
         </a>
       </li><!-- End Register Page Nav -->
 
@@ -131,15 +211,14 @@
     </ul>
 
   </aside><!-- End Sidebar-->
-
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Users</h1>
+      <h1>Student</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/vdashboard">Dashboard</a></li>
-          <li class="breadcrumb-item active">Users</li>
+          <li class="breadcrumb-item active">Student</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -157,21 +236,10 @@
             <div class="col-12">
               <div class="card recent-sales overflow-auto">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
+               
 
                 <div class="card-body">
-                  <h5 class="card-title">All Transactions <span>| Today</span></h5>
+                  <h5 class="card-title">All Records </h5>
 
                   <table class="table table-borderless datatable">
                     
@@ -179,7 +247,12 @@
                       <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
+                        <th scope="col">User Type</th>
                         <th scope="col">Department</th>
+                        <th scope="col">Key Id</th>
+                        <th scope="col">Key Name</th>
+                        <th scope="col">Transaction Date</th>
+                        <th scope="col">Transaction_Time</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
 
@@ -188,11 +261,16 @@
                     <tbody>
                             {{#data}}
                       <tr>
-                        <th scope="row"><a href="#">{{admin_id}}</a></th>
-                        <td><a href="#" class="text-primary">{{admin_name}}</a></td>
-                        <td>{{admin_department}}</td>
-                        <td>{{admin_email}}</td>
-                        <td><span class="badge bg-danger">{{admin_phno}}</span></td>
+                        <th scope="row"><a href="#">{{id}}</a></th>
+                        <td><a href="#" class="text-primary">{{Name}}</a></td>
+                        <td>{{user_type}}</td>
+                        <td>{{department}}</td>
+                        <td>{{key_id}}</td>
+                        <td>{{key_name}}</td>
+                        <td>{{Transaction_Date}}</td>
+                        <td>{{Transaction_Time}}</td>
+                        <td>{{email}}</td>
+                        <td>{{phno}}</td>
                       </tr>
   
                           {{/data}}

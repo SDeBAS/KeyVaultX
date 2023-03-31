@@ -6,7 +6,7 @@ const session = require("express-session");
 const flash = require("connect-flash")
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
-//const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
 var cors = require('cors')
 
 //--------------------------------------------------------------------------------------------------------------------------//
@@ -25,7 +25,7 @@ const mysql = require("./connection").con
 //DECLARING STATIC FILES
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
-app.set('view engine', 'ejs');
+//app.set('view engine', "ejs");
 app.set("view engine", "hbs");
 
 app.use(session({
@@ -436,7 +436,7 @@ app.post("/contact", encoder, function (req, res) {
 
 //--------------------------------------------------------------------------------------------------------------------------//
 
-/*
+
 //RFID
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));
 parser.on('open', function () {
@@ -492,7 +492,7 @@ parser.on('data', function (data) {
 parser.on('error', function (err) {
     console.log(err.message);
 });
-*/
+
 
 //--------------------------------------------------------------------------------------------------------------------------//
 

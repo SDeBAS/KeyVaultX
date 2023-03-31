@@ -108,12 +108,11 @@
 
             <div class="one_half last cfh">
               <form method="POST" class="contact-form">
-                <% if (message.length>0) { %>
-                                    <div>
-                                        <%=message %>
-                                    </div>
-                                    <% } %>
-                                    
+
+                <div>
+                     {{message}}
+
+                </div>                                   
                 <p>
                   <select name="users" id="users">
                     <option value="#" selected disabled>

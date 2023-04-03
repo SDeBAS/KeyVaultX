@@ -1,11 +1,13 @@
+
+/*STARTUP*/
 show databases;
 create database KeyVaultX;
 use keyvaultx;
-
 show tables;
-#TABLE CREATIONS 
 
-drop table all_keys;
+
+/*USER TABLES ND TRIGGERS*/
+
 
 create table admin
 (
@@ -24,7 +26,8 @@ delimiter //
 Create Trigger after_insert_admin  
 AFTER INSERT ON admin FOR EACH ROW  
 BEGIN  
-INSERT INTO rfidperm VALUES (new.admin_id, 3,CURDATE(), CURTIME());  
+INSERT INTO rfidperm VALUES (new.admin_id, 3,CURDATE(), CURTIME());
+INSERT INTO users VALUES (new.admin_id, new.admin_name,"ADMIN",new.admin_department,new.admin_email,new.admin_phno); 
 END //  
 
 alter table admin rename column admin_email to email;
@@ -40,7 +43,7 @@ insert into admin values
 9830729259
 );
 
-
+delete from admin where admin_id = 2247214;
 select * from admin;
 select admin_email,admin_password from admin;
 
@@ -61,7 +64,8 @@ delimiter //
 Create Trigger after_insert_faculty
 AFTER INSERT ON faculty FOR EACH ROW  
 BEGIN  
-INSERT INTO rfidperm VALUES (new.faculty_id, 2,CURDATE(), CURTIME());  
+INSERT INTO rfidperm VALUES (new.faculty_id, 2,CURDATE(), CURTIME());
+INSERT INTO users VALUES (new.faculty_id, new.faculty_name,"FACULTY",new.faculty_department,new.faculty_email,new.faculty_phno); 
 END //  
 
 alter table faculty rename column faculty_email to email;
@@ -97,7 +101,8 @@ delimiter //
 Create Trigger after_insert_student
 AFTER INSERT ON student FOR EACH ROW  
 BEGIN  
-INSERT INTO rfidperm VALUES (new.student_id, 1,CURDATE(), CURTIME());  
+INSERT INTO rfidperm VALUES (new.student_id, 1,CURDATE(), CURTIME()); 
+INSERT INTO users VALUES (new.student_id, new.student_name,"STUDENT",new.student_department,new.student_email,new.student_phno);  
 END //  
 
 alter table student rename column student_email to email;
@@ -106,14 +111,15 @@ alter table student rename column student_password to password;
 
 insert into student values
 (
-2247128,
-'Sagnik Mukhopadhyay',
+2247242,
+'Ashitha Jerry',
 'MCA',
-'A',
-'sagnik.mukhopadhyay@mca.christuniversity.in',
-'sagnik',
-9830729259
+'B',
+'ashitha.jerry@mca.christuniversity.in',
+'ashitha',
+9108084539
 );
+
 delete from student where student_id=2247214;
 
 alter table student
@@ -121,6 +127,21 @@ rename column v_password to student_password;
 select * from student;
 select student_email,student_password from student;
 
+
+
+create table users
+(
+id int primary key,
+Name varchar(255),
+user_type varchar(255),
+department varchar(255),
+email varchar(255),
+phno bigint
+);
+drop table users;
+
+
+/*CONTACT US*/
 
 create table contactus
 (
@@ -131,6 +152,9 @@ message varchar(255)
 );
 select * from contactus;
 delete * from contactus;
+
+/*REGISTER NEW USERS / ACCNT REQUESTS*/
+
 
 create table request
 (
@@ -149,15 +173,20 @@ alter table request rename column section to position;
 
 drop table request;
 
+/*KEYS*/
+
 
 create table allkey
 (
 id int primary key,
 name varchar(255),
 department varchar(255),
-position int
+permission int
 );
 select * from allkey;
+drop table allkey;
+
+/*TRANSACTIONS*/
 
 
 create table alltransactions
@@ -168,9 +197,31 @@ key_id int,
 status varchar(255)
 );
 
+create table keystaken
+(
+reg_no int primary key,
+key_id int,
+Time_taken varchar(255)
+ );
+ select * from keystaken;
+
+
+create table keysreturned
+(
+reg_no int primary key,
+key_id int,
+Time_taken varchar(255),
+duration time
+);
+drop table keysreturned;
+
+
+/*RFID PERMISSIONS*/
+
+
 create table rfidperm
 (
-id int,
+id int primary key,
 lvl int,
 userdate date,
 usertime time
@@ -178,21 +229,10 @@ usertime time
 drop table rfidperm;
 select * from rfidperm;
 
+drop table rfidperm;
 
+/*ALERTS*/
 
-create table users
-(
-id int,
-Name varchar(255),
-user_type varchar(255),
-department varchar(255),
-key_id int,
-key_name varchar(255),
-Transaction_Date date,
-Transaction_Time time,
-email varchar(255),
-phno bigint
-);
 
 create table alerts
 (
@@ -206,4 +246,6 @@ duration time,
 phno bigint,
 message varchar(255)
 );
+
+
 

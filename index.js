@@ -5,8 +5,8 @@ const path = require("path");
 const session = require("express-session");
 const flash = require("connect-flash")
 const { SerialPort } = require('serialport')
-const { ReadlineParser } = require('@serialport/parser-readline')
-const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+//const { ReadlineParser } = require('@serialport/parser-readline')
+//const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
 var cors = require('cors')
 
 //--------------------------------------------------------------------------------------------------------------------------//
@@ -159,7 +159,7 @@ app.get("/adashboard/addkeys", function (req, res) {
 app.get("/addkeys", function (req, res) {
     
     // fetching data from form
-    const { id, name, department, position} = req.query
+    const { id, name, department, permission} = req.query
 
     // Sanitization XSS...
     let qry = "select * from allkey where id=? or name=?";
@@ -174,7 +174,7 @@ app.get("/addkeys", function (req, res) {
 
                 // insert query
                 let qry2 = "insert into allkey values(?,?,?,?)";
-                mysql.query(qry2, [id, name, department, position], (err, results) => {
+                mysql.query(qry2, [id, name, department, permission], (err, results) => {
                     if (results.affectedRows > 0) {
                         res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardaddkeys"), { mesg: true })
                     }
@@ -190,10 +190,10 @@ app.get("/adashboard/removekeys", function (req, res) {
 });
 app.get("/removekeys", (req, res) => {
 
-    const { position } = req.query;
+    const { id } = req.query;
 
-    let qry = "delete from allkey where position=?";
-    mysql.query(qry, [position], (err, results) => {
+    let qry = "delete from allkey where key_id=?";
+    mysql.query(qry, [id], (err, results) => {
         if (err) throw err
         else {
             if (results.affectedRows > 0) {
@@ -436,7 +436,7 @@ app.post("/contact", encoder, function (req, res) {
 
 //--------------------------------------------------------------------------------------------------------------------------//
 
-
+/*
 //RFID
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));
 parser.on('open', function () {
@@ -447,36 +447,43 @@ app.listen(5000, () => {
     console.log(" USB Server is up at 5000");
 });
 
+
 var num = 0;
 var backr;
-
+var ldr1 = 0;
+var ldr2 = 0;
+var ldr3 = 0
+var reg = 0;
+var perm=0;
 parser.on('data', function (data) {
     
-    back=data
-    var reg=0;
-    var ldr=0;
+    var back=data
+    
     if (data.slice(-8,-6) != 22 || data.slice(-8,-6) != 22 )
     {
-        ldr = Number(data.slice(-3));
+        var ldr = Number(data.slice(-3));
     }
     else
     {
         reg = Number(back.slice(-8));
         backr=reg;
     }
-    if(backr>0 && ldr>0)
-    {
 
-        console.log(backr)
-        console.log(ldr)
         mysql.query("SELECT lvl from rfidperm where id = ?", [backr], function (err, results, fields) {
             if (results.length > 0) {
 
-                console.log("User Authenticated");
-                console.log(results[0].lvl);
-                console.log("\n")
+                //console.log(ldr);
+                //console.log(results[0].lvl.toString())
+                port.write(results[0].lvl.toString())
+                perm = results[0].lvl.toString();
+               // if (ldr1 > 0 && ldr2>0 && backr>0 && perm==='2') {
+                    console.log("User Authenticated");
+                    console.log(backr)
+                    console.log(ldr)
+                    console.log(results[0].lvl); 
 
-
+                   
+                
             }
             else {
                 console.log("User Not Found")
@@ -484,7 +491,9 @@ parser.on('data', function (data) {
 
             }
         })
-    }
+
+
+    
 });
 
 
@@ -493,7 +502,7 @@ parser.on('error', function (err) {
     console.log(err.message);
 });
 
-
+*/
 //--------------------------------------------------------------------------------------------------------------------------//
 
 

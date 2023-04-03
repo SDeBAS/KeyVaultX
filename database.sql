@@ -186,6 +186,7 @@ permission int
 select * from allkey;
 drop table allkey;
 
+
 /*TRANSACTIONS*/
 
 
@@ -196,6 +197,8 @@ name varchar(255),
 key_id int,
 status varchar(255)
 );
+select * from alltransactions;
+delete from alltransactions where id = 2247238 and status = "Returned";
 
 create table keystaken
 (
@@ -205,16 +208,82 @@ Time_taken varchar(255)
  );
  select * from keystaken;
 
+drop table keystaken;
+
+delimiter //
+Create Trigger after_insert_keystaken
+AFTER INSERT ON keystaken FOR EACH ROW  
+BEGIN  
+
+declare username varchar(255);
+SELECT name INTO username FROM users WHERE id=new.reg_no;
+
+if (select reg_no from keystaken where reg_no= new.reg_no) = new.reg_no
+then
+	INSERT INTO alltransactions VALUES(new.reg_no,username,new.key_id,"Not Returned");
+elseif (select reg_no and key_id from keysreturned where reg_no= new.reg_no) = new.reg_no
+then
+	INSERT INTO alltransactions VALUES(new.reg_no,username, new.key_id,"Returned");
+elseif (select reg_no and key_id from keysoverdue where reg_no= new.reg_no) = new.reg_no
+then
+	INSERT INTO alltransactions VALUES(new.reg_no,username, new.key_id,"Overdue");
+end if;
+
+END // 
+
+insert into keystaken values
+(
+2247234,
+13,
+current_time()
+);
+
 
 create table keysreturned
 (
 reg_no int primary key,
 key_id int,
 Time_taken varchar(255),
-duration time
+duration time,
+FOREIGN KEY (reg_no) REFERENCES keystaken(reg_no)
 );
 drop table keysreturned;
 
+delimiter //
+Create Trigger after_insert_keysreturned
+AFTER INSERT ON keysreturned FOR EACH ROW  
+BEGIN  
+
+declare username varchar(255);
+SELECT name INTO username FROM users WHERE id=new.reg_no;
+
+INSERT INTO alltransactions VALUES(new.reg_no,username, new.key_id,"Returned");
+
+END // 
+
+insert into keysreturned values
+(
+2247234,
+13,
+current_time,
+TIMEDIFF(Current_Time(),
+   (Select Time_taken FROM keystaken WHERE reg_no=2247234))
+);
+Select TIMEDIFF(Current_Time(),
+   (Select Time_taken FROM keystaken WHERE reg_no=2247234));
+
+(SELECT CURRENT_TIME()- Time_taken FROM keystaken WHERE reg_no=2247234) as origianl_time;
+Select CURRENT_TIME();
+
+desc keysreturned;
+delete from keysreturned where reg_no=2247238;
+create table keysoverdue
+(
+reg_no int primary key,
+key_id int,
+Time_taken varchar(255),
+duration time
+);
 
 /*RFID PERMISSIONS*/
 

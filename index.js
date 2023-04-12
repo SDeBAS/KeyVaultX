@@ -412,12 +412,6 @@ app.post("/request", encoder, function (req, res) {
 
     })
 
-    const response = fast2sms.sendMessage({
-        authorization: process.env.API_KEY,
-        message: "Helllo There, This is a Text Message",
-        numbers: [phno]
-    });
-    res.send(response);
 
 });
 

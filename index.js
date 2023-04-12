@@ -5,7 +5,7 @@ const path = require("path");
 const session = require("express-session");
 const flash = require("connect-flash")
 const { SerialPort } = require('serialport')
-const fast2sms=require('fast-two-sms');
+const nodemailer = require("nodemailer");
 require('dotenv').config();
 //const { ReadlineParser } = require('@serialport/parser-readline')
 //const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
@@ -415,6 +415,9 @@ app.post("/request", encoder, function (req, res) {
 
 });
 
+
+
+
 //--------------------------------------------------------------------------------------------------------------------------//
 
 
@@ -432,6 +435,30 @@ app.post("/contact", encoder, function (req, res) {
     mysql.query(qry2, [regno, name, email, message], (err, results) => {
         req.flash("message", " Your Response is recorded successfully");
         res.redirect("/contact");
+
+
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'debanjan.basu@mca.christuniversity.in',
+                pass: 'Abcdef@00'
+            }
+        });
+
+        var mailOptions = {
+            from: 'debanjan.basu@mca.christuniversity.in',
+            to: email,
+            subject: 'Response to Contact KeyVaultX',
+            text: 'Your Message was '+message
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
 
     })
 

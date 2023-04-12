@@ -20,6 +20,14 @@
     <link rel="stylesheet" type="text/css" href="/css/index.css" />
   </head>
 
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        } 
+    </style>
+
   <body class="page-template-default">
     <div class="site-wrapper">
       <div class="doc-loader"></div>
@@ -105,9 +113,38 @@
               <a class="socail-text" href="#">AJ.</a>
               <a class="socail-text" href="#"></a>
             </div>
-
+            <script>
+              function validateform() {
+                var name = document.myform.name.value;
+                var regno=document.myform.regno.value;
+                var dept=document.myform.dept.value;
+                var section=document.myform.section.value;
+                var pass=document.myform.section.value;
+                if (name == null || name == "") {
+                alert("Name can't be blank");
+                return false;
+                }
+                if (isNaN(regno) || regno=="" || regno==null) {
+                    alert("Reg no can't be blank");
+                    document.getElementById("regno").innerHTML = "Enter Numeric value only";
+                    return false;
+                }
+                if (dept == null || dept == "") {
+                alert("Department can't be blank");
+                return false;
+              }
+              if (section == null || section == "") {
+                alert("Section can't be blank");
+                return false;
+                }
+              if (pass == null || pass == "") {
+                alert("Password can't be blank");
+                return false;
+                }
+              }
+            </script>
             <div class="one_half last cfh">
-              <form method="POST" class="contact-form">
+              <form method="POST" class="contact-form" name="myform" onsubmit="return validateform()">
 
                 <div>
                      {{message}}
@@ -124,11 +161,13 @@
                 </p>
 
                 <p>
+
                   <input
                     id="regno"
                     type="number"
                     name="regno"
                     placeholder="Registration Number"
+                    minlength="7" maxlength="7" min="0" max="2299999"
                   />
                 </p>
                 <p>
@@ -136,7 +175,7 @@
                 </p>
                 <p>
                   <input
-                    id="name"
+                    id="dept"
                     type="text"
                     name="depart"
                     placeholder="Department"
@@ -144,7 +183,7 @@
                 </p>
                 <p>
                   <input
-                    id="name"
+                    id="section"
                     type="text"
                     name="post"
                     placeholder="Section or Post"
@@ -160,18 +199,20 @@
                 </p>
                 <p>
                   <input
-                    id="contact-email"
+                    id="pass"
                     type="password"
                     name="pass"
                     placeholder="Password"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required
                   />
                 </p>
                 <p>
                   <input
-                    id="contact-email"
+                    id="number"
                     type="number"
                     name="phno"
                     placeholder="Phone Number"
+                    pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$" title="Enter correct format" required
                   />
                 </p>
                 <p class="contact-submit-holder">

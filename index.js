@@ -92,12 +92,57 @@ app.get("/adashboard/allusers", function (req, res) {
     });
 });
 
-app.get("/adashboard/admin", function (req, res) {
+app.get("/adashboard/a+dmin", function (req, res) {
     let qry = "select * from admin";
     mysql.query(qry, (err, results) => {
         if (err) throw err
         else {
             res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardadmin"), { data: results })
+        }
+    });
+});
+
+app.get("/addadmin", function (req, res) {
+
+    // fetching data from form
+    const { id, name, department, email,phno,pass,position } = req.query
+
+    // Sanitization XSS...
+    let qry = "select * from admin where admin_id=?";
+    mysql.query(qry, [id], (err, results) => {
+        if (err)
+            throw err
+        else {
+
+            if (results.length > 0) {
+                res.render("add", { checkmesg: true })
+            } else {
+
+                // insert query
+                let qry2 = "insert into admin values(?,?,?,?,?,?,?)";
+                mysql.query(qry2, [id, name, department,position, email,pass,phno], (err, results) => {
+                    if (results.affectedRows > 0) {
+                        
+                        res.redirect("/adashboard/admin")
+                    }
+                })
+            }
+        }
+    })
+});
+
+app.get("/removeadmin", (req, res) => {
+
+    const { id } = req.query;
+
+    let qry = "delete from admin where admin_id=?";
+    mysql.query(qry, [id], (err, results) => {
+        if (err) throw err
+        else {
+            if (results.affectedRows > 0) {
+                res.redirect("/adashboard/admin")
+            }
+
         }
     });
 });
@@ -112,6 +157,53 @@ app.get("/adashboard/faculty", function (req, res) {
     });
 });
 
+app.get("/addfaculty", function (req, res) {
+
+    // fetching data from form
+    const { id, name, department, email, phno, pass, position } = req.query
+
+    // Sanitization XSS...
+    let qry = "select * from faculty where faculty_id=?";
+    mysql.query(qry, [id], (err, results) => {
+        if (err)
+            throw err
+        else {
+
+            if (results.length > 0) {
+                res.render("add", { checkmesg: true })
+            } else {
+
+                // insert query
+                let qry2 = "insert into faculty values(?,?,?,?,?,?,?)";
+                mysql.query(qry2, [id, name, department, position, email, pass, phno], (err, results) => {
+                    if (results.affectedRows > 0) {
+
+                        res.redirect("/adashboard/faculty")
+                    }
+                })
+            }
+        }
+    })
+});
+
+app.get("/removefaculty", (req, res) => {
+
+    const { id } = req.query;
+
+    let qry = "delete from faculty where faculty_id=?";
+    mysql.query(qry, [id], (err, results) => {
+        if (err) throw err
+        else {
+            if (results.affectedRows > 0) {
+                res.redirect("/adashboard/faculty")
+            }
+
+        }
+    });
+});
+
+
+
 app.get("/adashboard/student", function (req, res) {
     let qry = "select * from student";
     mysql.query(qry, (err, results) => {
@@ -121,6 +213,51 @@ app.get("/adashboard/student", function (req, res) {
         }
     });
 });
+
+app.get("/addstudent", function (req, res) {
+
+    // fetching data from form
+    const { id, name, department, email, phno, pass, position } = req.query
+
+    // Sanitization XSS...
+    let qry = "select * from student where student_id=?";
+    mysql.query(qry, [id], (err, results) => {
+        if (err)
+            throw err
+        else {
+
+            if (results.length > 0) {
+                res.render("add", { checkmesg: true })
+            } else {
+
+                // insert query
+                let qry2 = "insert into student values(?,?,?,?,?,?,?)";
+                mysql.query(qry2, [id, name, department, position, email, pass, phno], (err, results) => {
+                    if (results.affectedRows > 0) {
+
+                        res.redirect("/adashboard/student")
+                    }
+                })
+            }
+        }
+    })
+});
+app.get("/removestudent", (req, res) => {
+
+    const { id } = req.query;
+
+    let qry = "delete from student where student_id=?";
+    mysql.query(qry, [id], (err, results) => {
+        if (err) throw err
+        else {
+            if (results.affectedRows > 0) {
+                res.redirect("/adashboard/student")
+            }
+
+        }
+    });
+});
+
 
 app.get("/adashboard/rfidperm", function (req, res) {
     let qry = "select * from rfidperm";
@@ -319,6 +456,7 @@ app.get("/vdashboard/Contact", function (req, res) {
 
 
 
+
 //--------------------------------------------------------------------------------------------------------------------------//
 
 
@@ -413,6 +551,32 @@ app.post("/request", encoder, function (req, res) {
     })
 
 
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'debanjan.basu@mca.christuniversity.in',
+            pass: 'Abcdef@00'
+        },
+        from: 'debanjan.basu@mca.christuniversity.in', 
+    });
+
+    var mailOptions = {
+        from: 'debanjan.basu@mca.christuniversity.in',
+        to: email,
+        subject: 'Response for Account Request  KeyVaultX',
+        text: 'Your Details  are \n' + "Name : "+name + "\n"+ "Email : "+email+"\n"+"Registration No. : "
+        +regno+"\n"+"User Type : "+user+"\n"+"Department : "+dept+"\n"+"Phone No. : +91 - "+phno
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
+
 });
 
 
@@ -442,7 +606,8 @@ app.post("/contact", encoder, function (req, res) {
             auth: {
                 user: 'debanjan.basu@mca.christuniversity.in',
                 pass: 'Abcdef@00'
-            }
+            },
+            from: 'debanjan.basu@mca.christuniversity.in', 
         });
 
         var mailOptions = {
@@ -467,6 +632,7 @@ app.post("/contact", encoder, function (req, res) {
 //--------------------------------------------------------------------------------------------------------------------------//
 
 /*
+
 //RFID
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));
 parser.on('open', function () {
@@ -506,15 +672,15 @@ parser.on('data', function (data) {
                 //console.log(results[0].lvl.toString())
                 port.write(results[0].lvl.toString())
                 perm = results[0].lvl.toString();
-               // if (ldr1 > 0 && ldr2>0 && backr>0 && perm==='2') {
+
+                //if (ldr1 > 0 && ldr2 > 0 && ld3>0 && backr > 0 && perm === '3') {
                     console.log("User Authenticated");
                     console.log(backr)
                     console.log(ldr)
-                    console.log(results[0].lvl); 
-
-                   
+                    console.log(results[0].lvl);
                 
-            }
+
+           }
             else {
                 console.log("User Not Found")
                 console.log("\n")
@@ -533,6 +699,7 @@ parser.on('error', function (err) {
 });
 
 */
+
 //--------------------------------------------------------------------------------------------------------------------------//
 
 

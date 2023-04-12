@@ -236,21 +236,10 @@
             <div class="col-12">
               <div class="card recent-sales overflow-auto">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
+                
 
                 <div class="card-body">
-                  <h5 class="card-title">All Transactions <span>| Today</span></h5>
+                  <h5 class="card-title">All Records </h5>
 
                   <table class="table table-borderless datatable">
                     
@@ -261,6 +250,7 @@
                         <th scope="col">Department</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
+                        
 
                       </tr>
                     </thead>
@@ -272,6 +262,7 @@
                         <td>{{admin_department}}</td>
                         <td>{{admin_email}}</td>
                         <td><span class="badge bg-danger">{{admin_phno}}</span></td>
+                        
                       </tr>
   
                           {{/data}}
@@ -280,10 +271,78 @@
                   </table>
 
                 </div>
-
+                
               </div>
-            </div><!-- End Recent Sales -->
+              <div class="btns" style="display:flex;">
+                <div id="show-add">
+                  <button type="submit" class="btn btn-primary"style="margin-right:1rem;">Add Admin</button>
+                </div>
+                
+                <div id="show-del">
+                  <button type="submit" class="btn btn-primary" >Delete Admin</button>
+                </div>
+              </div>
 
+            </div><!-- End Recent Sales -->
+            <div class="popup">
+               <!-- No Labels Form -->
+              <form class="row g-3" action="/addadmin">
+
+              <div class="col-md-12">
+                  <input type="text" class="form-control" name="name" placeholder="Name">
+                </div>
+                <div class="col-md-6">
+                  <input type="number" class="form-control" name="id" placeholder="Registration No.">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" name="department" placeholder="Admin Department">
+                </div>
+                <div class="col-md-6">
+                  <input type="email" class="form-control" name="email" placeholder="Admin Email">
+                </div>
+                <div class="col-md-6">
+                  <input type="password" class="form-control" name="pass" placeholder="Admin Password">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" name="position" placeholder="Admin Position">
+                </div>
+                <div class="col-md-6">
+                  <input type="number" class="form-control" name="phno" placeholder="Admin Phone Number">
+                </div>
+              
+                
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-secondary" id="close-add">Cancel</button>
+              
+                </div>
+
+
+                 {{#if mesg}}
+              <h3>Data Inserted</h3>
+            {{/if}}
+
+                {{#if checkmesg}}
+                <h3>Emailid or Phoneno already present!</h3>
+                {{/if}}
+              </form><!-- End No Labels Form -->
+            </div>
+            <div class="popupdel">
+              <form class="row g-3" action="/removeadmin">
+                <div class="col-12">
+                  <input type="number" class="form-control" name="id" placeholder="Admin Registration Number">
+                </div>
+              
+                
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Delete</button>
+                  <button type="reset" class="btn btn-secondary" id="close-del">Cancel</button>
+                </div>
+
+                 
+              </form><!-- End No Labels Form -->
+
+            </div>
 
           </div>
         </div><!-- End Left side columns -->
@@ -305,6 +364,23 @@
 
   <!-- Template Main JS File -->
   <script src="/js/dashboard.js"></script>
+  <script>
+    document.querySelector("#show-add")
+    .addEventListener("click",function(){
+      document.querySelector(".popup").classList.add("active");
+
+    });
+    document.querySelector("#close-add").addEventListener("click",function(){
+      document.querySelector(".popup").classList.remove("active"); })
+
+       document.querySelector("#show-del")
+    .addEventListener("click",function(){
+      document.querySelector(".popupdel").classList.add("active");
+
+    });
+    document.querySelector("#close-del").addEventListener("click",function(){
+      document.querySelector(".popupdel").classList.remove("active"); })
+  </script>
 
 </body>
 

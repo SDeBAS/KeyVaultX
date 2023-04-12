@@ -275,8 +275,75 @@
                 </div>
 
               </div>
+              <div class="btns" style="display:flex;">
+                <div id="show-add">
+                  <button type="submit" class="btn btn-primary"style="margin-right:1rem;">Add Student</button>
+                </div>
+                
+                <div id="show-del">
+                  <button type="submit" class="btn btn-primary" >Delete Student</button>
+                </div>
+              </div>
             </div><!-- End Recent Sales -->
+            <div class="popup">
+               <!-- No Labels Form -->
+              <form class="row g-3" action="/addstudent">
 
+              <div class="col-md-12">
+                  <input type="text" class="form-control" name="name" placeholder="Name">
+                </div>
+                <div class="col-md-6">
+                  <input type="number" class="form-control" name="id" placeholder="Registration No.">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" name="department" placeholder="Student Department">
+                </div>
+                <div class="col-md-6">
+                  <input type="email" class="form-control" name="email" placeholder="Student Email">
+                </div>
+                <div class="col-md-6">
+                  <input type="password" class="form-control" name="pass" placeholder="Student Password">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" name="position" placeholder="Student Section">
+                </div>
+                <div class="col-md-6">
+                  <input type="number" class="form-control" name="phno" placeholder="Student Phone Number">
+                </div>
+              
+                
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-secondary" id="close-add">Cancel</button>
+              
+                </div>
+
+
+                 {{#if mesg}}
+              <h3>Data Inserted</h3>
+            {{/if}}
+
+                {{#if checkmesg}}
+                <h3>Emailid or Phoneno already present!</h3>
+                {{/if}}
+              </form><!-- End No Labels Form -->
+            </div>
+            <div class="popupdel">
+              <form class="row g-3" action="/removestudent">
+                <div class="col-12">
+                  <input type="number" class="form-control" name="id" placeholder="Student Registration Number">
+                </div>
+              
+                
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Delete</button>
+                  <button type="reset" class="btn btn-secondary" id="close-del">Cancel</button>
+                </div>
+
+                 
+              </form><!-- End No Labels Form -->
+
+            </div>
 
           </div>
         </div><!-- End Left side columns -->
@@ -298,6 +365,24 @@
 
   <!-- Template Main JS File -->
   <script src="/js/dashboard.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script>
+    document.querySelector("#show-add")
+    .addEventListener("click",function(){
+      document.querySelector(".popup").classList.add("active");
+
+    });
+    document.querySelector("#close-add").addEventListener("click",function(){
+      document.querySelector(".popup").classList.remove("active"); })
+
+       document.querySelector("#show-del")
+    .addEventListener("click",function(){
+      document.querySelector(".popupdel").classList.add("active");
+
+    });
+    document.querySelector("#close-del").addEventListener("click",function(){
+      document.querySelector(".popupdel").classList.remove("active"); })
+  </script>
 
 </body>
 

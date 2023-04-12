@@ -5,6 +5,8 @@ const path = require("path");
 const session = require("express-session");
 const flash = require("connect-flash")
 const { SerialPort } = require('serialport')
+const fast2sms=require('fast-two-sms');
+require('dotenv').config();
 //const { ReadlineParser } = require('@serialport/parser-readline')
 //const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
 var cors = require('cors')
@@ -410,6 +412,13 @@ app.post("/request", encoder, function (req, res) {
 
     })
 
+    const response = fast2sms.sendMessage({
+        authorization: process.env.API_KEY,
+        message: "Helllo There, This is a Text Message",
+        numbers: [phno]
+    });
+    res.send(response);
+
 });
 
 //--------------------------------------------------------------------------------------------------------------------------//
@@ -517,4 +526,6 @@ app.listen(port2, (err) => {
 
 //--------------------------------------------------------------------------------------------------------------------------//
 
-//VIEW DASHBOARD
+//FUNCTION SMS
+
+

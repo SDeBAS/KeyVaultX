@@ -42,7 +42,7 @@ insert into admin values
 'debanjan',
 9830729259
 );
-
+UPDATE ADMIN SET ADMIN_PASSWORD="Debanjan@123" where Admin_password="Deb@123";
 delete from admin where admin_id = 2247214;
 select * from admin;
 select admin_email,admin_password from admin;
@@ -127,6 +127,31 @@ rename column v_password to student_password;
 select * from student;
 select student_email,student_password from student;
 
+CREATE VIEW ProductsWithAttributesView AS
+SELECT      
+    products.Name as 'Products',
+    atr1.Value As 'Number of wheels',
+    atr2.Value As 'People',
+    atr3.Value As 'Engine'
+FROM Products AS products
+LEFT JOIN Attributes AS atr1 ON atr1.ProductId = products.Id AND atr1.DefinitionId = 1
+LEFT JOIN Attributes AS atr2 ON atr2.ProductId = products.Id AND atr2.DefinitionId = 2
+LEFT JOIN Attributes AS atr3 ON atr3.ProductId = products.Id AND atr3.DefinitionId = 3
+
+create view currentuser as
+select 
+admin.admin_id as "ID",
+admin.admin_name as "Name",
+admin.admin_email as "Email"
+from admin as a
+left join admin on admin.admin_id=a.admin_id
+right join faculty on faculty.faculty_id=a.admin_id
+right join student on student.student_id=a.admin_id;
+
+drop view currentuser;
+select * from currentuser;
+
+
 
 
 create table users
@@ -139,6 +164,7 @@ email varchar(255),
 phno bigint
 );
 drop table users;
+
 
 
 /*CONTACT US*/
@@ -316,5 +342,11 @@ phno bigint,
 message varchar(255)
 );
 
-
+create table vault
+(
+key_id int primary key not null,
+time_taken time,
+keys_left_present int,
+foreign key (key_id) references allkey(id)
+);
 

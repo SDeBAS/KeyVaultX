@@ -7,8 +7,8 @@ const flash = require("connect-flash")
 const { SerialPort } = require('serialport')
 const nodemailer = require("nodemailer");
 require('dotenv').config();
-//const { ReadlineParser } = require('@serialport/parser-readline')
-//const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+const { ReadlineParser } = require('@serialport/parser-readline')
+const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
 var cors = require('cors')
 
 //--------------------------------------------------------------------------------------------------------------------------//
@@ -388,7 +388,7 @@ app.get("/adashboard/keysreturned", function (req, res) {
 });
 
 app.get("/adashboard/overdue", function (req, res) {
-    let qry = "select * from overduekeys";
+    let qry = "select * from keysoverdue";
     mysql.query(qry, (err, results) => {
         if (err) throw err
         else {
@@ -538,13 +538,14 @@ app.post("/request", encoder, function (req, res) {
     var regno = req.body.regno;
     var user = req.body.users;
     var dept = req.body.depart;
+    var section = req.body.section;
     var post = req.body.post;
     var phno = req.body.phno;
     var pass = req.body.pass;
     console.log(user, regno, name, email, pass, dept, post, phno);
 
     let qry2 = "insert into request values(?,?,?,?,?,?,?,?)";
-    mysql.query(qry2, [regno, user, name, dept, post, email, pass, phno], (err, results) => {
+    mysql.query(qry2, [regno, user, name, dept,post, email, pass, phno], (err, results) => {
         req.flash("message", " Your Request is recorded successfully");
         res.redirect("/request");
 
@@ -631,7 +632,7 @@ app.post("/contact", encoder, function (req, res) {
 
 //--------------------------------------------------------------------------------------------------------------------------//
 
-/*
+
 
 //RFID
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));
@@ -688,6 +689,7 @@ parser.on('data', function (data) {
             }
         })
 
+    res.clearCookie('title');
 
     
 });
@@ -698,7 +700,7 @@ parser.on('error', function (err) {
     console.log(err.message);
 });
 
-*/
+
 
 //--------------------------------------------------------------------------------------------------------------------------//
 

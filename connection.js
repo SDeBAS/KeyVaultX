@@ -5,7 +5,7 @@ const connection = mysql.createPool({
     multipleStatements : true,
     host: "localhost",
     user: "root",
-    password: "123456",
+    password: "debanjan",
     database: "keyvaultx"
 });
 

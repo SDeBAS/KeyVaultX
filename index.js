@@ -632,7 +632,7 @@ app.post("/contact", encoder, function (req, res) {
 
 //--------------------------------------------------------------------------------------------------------------------------//
 
-/*
+
 
 //RFID
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));

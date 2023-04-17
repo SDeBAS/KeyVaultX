@@ -42,7 +42,7 @@ insert into admin values
 'debanjan',
 9830729259
 );
-
+UPDATE ADMIN SET ADMIN_PASSWORD="Debanjan@123" where Admin_password="Deb@123";
 delete from admin where admin_id = 2247214;
 select * from admin;
 select admin_email,admin_password from admin;
@@ -127,6 +127,31 @@ rename column v_password to student_password;
 select * from student;
 select student_email,student_password from student;
 
+CREATE VIEW ProductsWithAttributesView AS
+SELECT      
+    products.Name as 'Products',
+    atr1.Value As 'Number of wheels',
+    atr2.Value As 'People',
+    atr3.Value As 'Engine'
+FROM Products AS products
+LEFT JOIN Attributes AS atr1 ON atr1.ProductId = products.Id AND atr1.DefinitionId = 1
+LEFT JOIN Attributes AS atr2 ON atr2.ProductId = products.Id AND atr2.DefinitionId = 2
+LEFT JOIN Attributes AS atr3 ON atr3.ProductId = products.Id AND atr3.DefinitionId = 3
+
+create view currentuser as
+select 
+admin.admin_id as "ID",
+admin.admin_name as "Name",
+admin.admin_email as "Email"
+from admin as a
+left join admin on admin.admin_id=a.admin_id
+right join faculty on faculty.faculty_id=a.admin_id
+right join student on student.student_id=a.admin_id;
+
+drop view currentuser;
+select * from currentuser;
+
+
 
 
 create table users
@@ -139,6 +164,7 @@ email varchar(255),
 phno bigint
 );
 drop table users;
+
 
 
 /*CONTACT US*/
@@ -184,6 +210,23 @@ department varchar(255),
 permission int
 );
 select * from allkey;
+
+delimiter //
+Create Trigger after_insert_allkey
+AFTER INSERT ON allkey FOR EACH ROW  
+BEGIN  
+
+INSERT INTO vault VALUES (new.id, current_time()); 
+
+END // 
+
+insert into allkey values
+(
+11,
+"Computer Lab",
+"MCA",
+1
+);
 drop table allkey;
 
 
@@ -200,15 +243,21 @@ status varchar(255)
 select * from alltransactions;
 delete from alltransactions where id = 2247238 and status = "Returned";
 
+truncate table alltransactions;
+
 create table keystaken
 (
-reg_no int primary key,
+reg_no int,
 key_id int,
+Date  date,
 Time_taken varchar(255)
  );
  select * from keystaken;
-
+delete from keystaken where reg_no=2247214;
 drop table keystaken;
+truncate table keystaken;
+
+
 
 delimiter //
 Create Trigger after_insert_keystaken
@@ -233,21 +282,25 @@ END //
 
 insert into keystaken values
 (
-2247234,
-13,
+2247214,
+12,
+"2022-04-16",
 current_time()
 );
-
+truncate table keysreturned;
 
 create table keysreturned
 (
-reg_no int primary key,
+reg_no int,
 key_id int,
+Date  date,
 Time_taken varchar(255),
-duration time,
-FOREIGN KEY (reg_no) REFERENCES keystaken(reg_no)
+duration time
 );
 drop table keysreturned;
+
+
+truncate table keysreturned;
 
 delimiter //
 Create Trigger after_insert_keysreturned
@@ -263,20 +316,33 @@ END //
 
 insert into keysreturned values
 (
-2247234,
-13,
+2247214,
+(Select key_id FROM keystaken WHERE reg_no = 2247214),
+CURRENT_DATE(),
 current_time,
-TIMEDIFF(Current_Time(),
-   (Select Time_taken FROM keystaken WHERE reg_no=2247234))
+TIMEDIFF(Current_Time(),(Select Time_taken FROM keystaken WHERE reg_no=2247214))
 );
+truncate table keysreturned;
+truncate table keystaken;
+
+insert into keysreturned values(2247214,
+(Select key_id FROM keystaken WHERE reg_no = 2247214),
+CURRENT_DATE(),
+Current_Time,
+TIMEDIFF(Current_Time(),(Select Time_taken FROM keystaken WHERE reg_no = 2247214))
+);
+
+
 Select TIMEDIFF(Current_Time(),
-   (Select Time_taken FROM keystaken WHERE reg_no=2247234));
+   (Select Time_taken FROM keystaken WHERE reg_no=2247214));
 
 (SELECT CURRENT_TIME()- Time_taken FROM keystaken WHERE reg_no=2247234) as origianl_time;
 Select CURRENT_TIME();
 
 desc keysreturned;
-delete from keysreturned where reg_no=2247238;
+select * from keysreturned;
+
+delete from keysreturned where reg_no=2247214;
 create table keysoverdue
 (
 reg_no int primary key,
@@ -284,6 +350,8 @@ key_id int,
 Time_taken varchar(255),
 duration time
 );
+
+
 
 /*RFID PERMISSIONS*/
 
@@ -297,8 +365,9 @@ usertime time
 );
 drop table rfidperm;
 select * from rfidperm;
-
+delete from rfidperm where id = 2247146;
 drop table rfidperm;
+
 
 /*ALERTS*/
 
@@ -316,5 +385,18 @@ phno bigint,
 message varchar(255)
 );
 
+create table vault
+(
+key_id int primary key not null,
+time_taken time,
+foreign key (key_id) references allkey(id)
+);
+
+insert into vault values
+(
+11,
+current_time());
+
+drop table vault;
 
 

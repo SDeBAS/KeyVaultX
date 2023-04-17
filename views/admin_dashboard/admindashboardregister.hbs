@@ -268,7 +268,7 @@
                         <td>{{phno}}</td>
                         <td>{{password}}</td>
                         <td><span class="badge bg-danger">{{user_type}}</span></td>
-                        <td id="accept"> <i class="bi bi-check-square-fill" style="font-size: 25px;"></i></td>
+                        <td id="accept"> <i class="bi bi-check-square-fill" style="font-size: 25px;" onclick="acceptuser({{id}})"></i></td>
                         <td id="delete"><i class="bi bi-x-lg"  style="font-size: 25px;"></i></td>
                       </tr>
   
@@ -303,6 +303,21 @@
 
   <!-- Template Main JS File -->
   <script src="/js/dashboard.js"></script>
+  <script>
+    /*
+    function acceptuser(id)
+    {
+      console.log(id);
+      fetch(`/createnewuser/${id}`,{method : 'GET'})
+      .then((res) => res.json())
+      .then((data) => {
+             console.log(id)
+      })
+        res.json()
+      }
+    */
+
+  </script>
 
 </body>
 

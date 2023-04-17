@@ -645,13 +645,10 @@ app.listen(5000, () => {
 });
 
 
-var num = 0;
 var backr;
-var ldr1 = 0;
-var ldr2 = 0;
-var ldr3 = 0
 var reg = 0;
 var perm=0;
+var count_keys=3;
 parser.on('data', function (data) {
     
     var back=data
@@ -666,33 +663,94 @@ parser.on('data', function (data) {
         backr=reg;
     }
 
-        mysql.query("SELECT lvl from rfidperm where id = ?", [backr], function (err, results, fields) {
+        mysql.query("SELECT lvl from rfidperm where id = ?;", [backr], function (err, results, fields) {
             if (results.length > 0) {
 
-                //console.log(ldr);
-                //console.log(results[0].lvl.toString())
                 port.write(results[0].lvl.toString())
                 perm = results[0].lvl.toString();
+                var backldr=ldr;
+                mysql.query("SELECT * from keystaken where reg_no = ?", [backr], function (err, results, fields) {
+                    if (results.length > 0) 
+                    {
+                        if (ldr == 110 || ldr == 120 || ldr == 130)
+                        {
+                        
+                                returnkeys(backr, ldr / 10);
+                                return;
+                            }
+                        
+                        }
+                        
+                    else
+                    {
 
-                //if (ldr1 > 0 && ldr2 > 0 && ld3>0 && backr > 0 && perm === '3') {
-                    console.log("User Authenticated");
-                    console.log(backr)
-                    console.log(ldr)
-                    console.log(results[0].lvl);
-                
+                        if (ldr == 110 || ldr == 120 || ldr == 130)
+                        {
+                            console.log("\n\nUser Authenticated");
+                            console.log("Registration Number : " + backr)
+                            console.log("PERMISSION LEVEL : " + perm);
+                            console.log("KEY STATUS : " + ldr);
+                            console.log(typeof (ldr));
 
+                            takekeys(backr,ldr/10);
+                            return;
+                        }
+                        
+                    }
+                    })
            }
-            else {
+            else 
+            {
                 console.log("User Not Found")
                 console.log("\n")
 
             }
-        })
-
-    res.clearCookie('title');
-
-    
+        })   
 });
+
+function takekeys(backr,ldr)
+{
+
+    mysql.query("select * from vault  where key_id=?", [ldr], function (err, results, fields) {
+        if (results.length > 0) {
+            mysql.query("delete from  vault where key_id = ?", [ldr], function (err, results, fields) {
+                if (results.affectedRows > 0) {
+                    console.log("Key Deleted from Vault  succesfully");
+                }
+            });
+
+            mysql.query("insert into keystaken values(?,?,Current_date(),Current_Time());", [backr, ldr], function (err, results, fields) {
+                if (results.affectedRows > 0) {
+                    console.log("User Added  succesfully");
+
+                }
+            });
+        }
+    });
+}
+function returnkeys(backr,ldr)
+{
+    mysql.query("select * from keysreturned where key_id=? and reg_no =?;", [ldr,backr ], function (err, results, fields) {
+        if(results.length>0)
+        {
+            console.log("Already Returned");
+            return;
+        }
+        else {
+    mysql.query("insert into keysreturned values(?,(Select key_id FROM keystaken WHERE reg_no = ?),CURRENT_DATE(),Current_Time,TIMEDIFF(Current_Time(),(Select Time_taken FROM keystaken WHERE reg_no = ?)));", [backr, backr, backr], function (err, results, fields) {
+        if (results.affectedRows > 0) {
+            console.log("Key Returned succesfully");
+            mysql.query("insert into vault values((Select key_id FROM keystaken WHERE reg_no = ?),Current_Time()); ", [backr], function (err, results, fields) {
+                if (results.affectedRows > 0) {
+                    console.log("Key Added succesfully");
+                }
+                return;
+            });
+        }
+    });
+    }
+});
+}
 
 
 

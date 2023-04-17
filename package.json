@@ -21,6 +21,7 @@
     "hbs": "^4.2.0",
     "ms": "^2.1.2",
     "mysql": "^2.18.1",
+    "node": "^19.8.1",
     "node-addon-api": "^5.1.0",
     "node-gyp-build": "^4.6.0",
     "nodemailer": "^6.9.1",

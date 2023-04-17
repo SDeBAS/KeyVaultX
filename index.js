@@ -721,7 +721,7 @@ function takekeys(backr,ldr)
 
             mysql.query("insert into keystaken values(?,?,Current_date(),Current_Time());", [backr, ldr], function (err, results, fields) {
                 if (results.affectedRows > 0) {
-                    console.log("User Added  succesfully");
+                    console.log("Key Taken  succesfully");
 
                 }
             });

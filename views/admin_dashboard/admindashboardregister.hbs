@@ -118,11 +118,7 @@
           <i class="bi bi-bar-chart"></i><span>Notifications</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/adashboard/alerts">
-              <i class="bi bi-circle"></i><span>Alerts</span>
-            </a>
-          </li>
+          
           <li>
             <a href="/adashboard/vault">
               <i class="bi bi-circle"></i><span>Vault Condition</span>
@@ -174,11 +170,7 @@
               <i class="bi bi-circle"></i><span>Keys Returned</span>
             </a>
           </li>
-          <li>
-            <a href="/adashboard/overdue">
-              <i class="bi bi-circle"></i><span>Overdue Keys</span>
-            </a>
-          </li>
+          
         </ul>
       </li><!-- End Forms Nav -->
 
@@ -268,8 +260,8 @@
                         <td>{{phno}}</td>
                         <td>{{password}}</td>
                         <td><span class="badge bg-danger">{{user_type}}</span></td>
-                        <td id="accept"> <i class="bi bi-check-square-fill" style="font-size: 25px;" onclick="acceptuser({{id}})"></i></td>
-                        <td id="delete"><i class="bi bi-x-lg"  style="font-size: 25px;"></i></td>
+                        <td id="accept"> <i class="bi bi-check-square-fill" style="font-size: 25px;" onclick="acceptuser({{id}}, '{{user_type}}')"></i></td>
+                        <td id="delete"><i class="bi bi-x-lg"  style="font-size: 25px;" onclick="declineuser({{id}}, '{{user_type}}')"></i></td>
                       </tr>
   
                           {{/data}}
@@ -304,18 +296,51 @@
   <!-- Template Main JS File -->
   <script src="/js/dashboard.js"></script>
   <script>
-    /*
-    function acceptuser(id)
-    {
-      console.log(id);
-      fetch(`/createnewuser/${id}`,{method : 'GET'})
-      .then((res) => res.json())
-      .then((data) => {
-             console.log(id)
-      })
-        res.json()
-      }
-    */
+    
+  function acceptuser(id, user) {
+  console.log(id);
+  const data = {
+  type: user
+};
+    console.log(data);
+
+  fetch(`/createnewuser/${id}`, { 
+    method: 'POST', 
+    headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data) })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
+  function declineuser(id, user) {
+  console.log(id);
+  const data = {
+  type: user
+};
+    console.log(data);
+
+  fetch(`/deletenewuser/${id}`, { 
+    method: 'POST', 
+    headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data) })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
 
   </script>
 

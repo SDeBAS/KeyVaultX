@@ -82,7 +82,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="/adashboard">
+        <a class="nav-link " href="/dashboard">
           <i class="bi bi-grid"></i>
           <span>Admin Dashboard</span>
         </a>
@@ -127,12 +127,7 @@
           <i class="bi bi-bar-chart"></i><span>Notifications</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/adashboard/alerts">
-              <i class="bi bi-circle"></i><span>Alerts</span>
-            </a>
-          </li>
-          <li>
+          
             <a href="/adashboard/vault">
               <i class="bi bi-circle"></i><span>Vault Condition</span>
             </a>
@@ -183,11 +178,7 @@
               <i class="bi bi-circle"></i><span>Keys Returned</span>
             </a>
           </li>
-          <li>
-            <a href="/adashboard/overdue">
-              <i class="bi bi-circle"></i><span>Overdue Keys</span>
-            </a>
-          </li>
+          
         </ul>
       </li><!-- End Forms Nav -->
 
@@ -219,6 +210,7 @@
     </ul>
 
   </aside><!-- End Sidebar-->
+  
   <main id="main" class="main">
 
     <div class="pagetitle">
@@ -279,40 +271,7 @@
                   </table>
 
                 </div>
-                  <script>
-                  function validateform() {
-                        var name = document.myform.name.value;
-                        var regno=document.myform.regno.value;
-                        var email=document.myform.email.value;
-                        var position=document.myform.position.value;
-                        var dept=document.myform.dept.value;
-                        var phno=document.myform.section.value;
-                        var pass=document.myform.section.value;
-                        if (name == null || name == "") {
-                        alert("Name can't be blank");
-                        return false;
-                        }
-                        if (isNaN(regno) || regno=="" || regno==null) {
-                            alert("Reg no can't be blank");
-                            document.getElementById("regno").innerHTML = "Enter Numeric value only";
-                            return false;
-                        }
-                        if(position == null || position == "")
-                        {
-                          alert("Postion can't be blank");
-                          return false;
-                        }
-                        if (dept == null || dept == "") {
-                        alert("Department can't be blank");
-                        return false;
-                      }
-                     
-                      if (pass == null || pass == "") {
-                        alert("Password can't be blank");
-                        return false;
-                        }
-                      }
-                    </script>
+                  
                       </div>
                       <div class="btns" style="display:flex;">
                         <div id="show-add">
@@ -333,7 +292,7 @@
                           <input type="text" class="form-control" name="name" id="name" placeholder="Name" required>
                         </div>
                         <div class="col-md-6">
-                          <input type="number" class="form-control" name="regno" id="regno" placeholder="Registration No." minlength="7" maxlength="7" min="0" max="2299999" required>
+                          <input type="number" class="form-control" name="regno" id="regno" placeholder="Registration No." minlength="7" maxlength="7"  max="2299999" required>
                         </div>
                         <div class="col-md-6">
                           <input type="text" class="form-control" name="dept" id="dept" placeholder="Admin Department" required>
@@ -372,14 +331,16 @@
               <form class="row g-3" action="/removeadmin" name="myform" onsubmit="return validateform()">
                 <div class="col-12">
                   <input type="number" class="form-control" name="regno" id="regno" placeholder="Admin Registration Number" minlength="7" maxlength="7" min="0" max="2299999" required>
-                        </div>
                 </div>
-              
-                
+
                 <div class="text-center">
                   <button type="submit" class="btn btn-primary">Delete</button>
                   <button type="reset" class="btn btn-secondary" id="close-del">Cancel</button>
                 </div>
+                </div>
+              
+                
+                
 
                  
               </form><!-- End No Labels Form -->
@@ -423,6 +384,41 @@
     document.querySelector("#close-del").addEventListener("click",function(){
       document.querySelector(".popupdel").classList.remove("active"); })
   </script>
+
+  <script>
+                  function validateform() {
+                        var name = document.myform.name.value;
+                        var regno=document.myform.regno.value;
+                        var email=document.myform.email.value;
+                        var position=document.myform.position.value;
+                        var dept=document.myform.dept.value;
+                        var phno=document.myform.section.value;
+                        var pass=document.myform.section.value;
+                        if (name == null || name == "") {
+                        alert("Name can't be blank");
+                        return false;
+                        }
+                        if (isNaN(regno) || regno=="" || regno==null) {
+                            alert("Reg no can't be blank");
+                            document.getElementById("regno").innerHTML = "Enter Numeric value only";
+                            return false;
+                        }
+                        if(position == null || position == "")
+                        {
+                          alert("Postion can't be blank");
+                          return false;
+                        }
+                        if (dept == null || dept == "") {
+                        alert("Department can't be blank");
+                        return false;
+                      }
+                     
+                      if (pass == null || pass == "") {
+                        alert("Password can't be blank");
+                        return false;
+                        }
+                      }
+                    </script>
 
 </body>
 

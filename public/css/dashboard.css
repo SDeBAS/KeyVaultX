@@ -1285,6 +1285,7 @@ border-radius: 10px;
 text-align: center;
 opacity: 0;
 transition: opacity 200ms ease-in-out 0ms;
+margin-top: 2rem;
 }
 
 .popupdel.active

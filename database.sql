@@ -28,7 +28,14 @@ AFTER INSERT ON admin FOR EACH ROW
 BEGIN  
 INSERT INTO rfidperm VALUES (new.admin_id, 3,CURDATE(), CURTIME());
 INSERT INTO users VALUES (new.admin_id, new.admin_name,"ADMIN",new.admin_department,new.admin_email,new.admin_phno); 
-END //  
+END //
+
+delimiter //
+Create Trigger before_delete_admin  
+before Delete ON admin FOR EACH ROW  
+BEGIN  
+delete from rfidperm where id=old.admin_id;
+END // 
 
 alter table admin rename column admin_email to email;
 alter table admin rename column admin_password to password;
@@ -68,6 +75,13 @@ INSERT INTO rfidperm VALUES (new.faculty_id, 2,CURDATE(), CURTIME());
 INSERT INTO users VALUES (new.faculty_id, new.faculty_name,"FACULTY",new.faculty_department,new.faculty_email,new.faculty_phno); 
 END //  
 
+delimiter //
+Create Trigger before_delete_faculty
+before Delete ON faculty FOR EACH ROW  
+BEGIN  
+delete from rfidperm where id=old.faculty_id;
+END // 
+
 alter table faculty rename column faculty_email to email;
 alter table faculty rename column faculty_password to password;
 
@@ -84,6 +98,9 @@ insert into faculty values
 delete from faculty where faculty_id=635;
 select * from faculty;
 select student_email,student_password from student;
+
+UPDATE student SET v_PASSWORD="Ashitha@1234" where v_password="ashitha";
+
 
 create table student
 (
@@ -104,6 +121,13 @@ BEGIN
 INSERT INTO rfidperm VALUES (new.student_id, 1,CURDATE(), CURTIME()); 
 INSERT INTO users VALUES (new.student_id, new.student_name,"STUDENT",new.student_department,new.student_email,new.student_phno);  
 END //  
+
+delimiter //
+Create Trigger before_delete_student
+before Delete ON student FOR EACH ROW  
+BEGIN  
+delete from rfidperm where id=old.student_id;
+END // 
 
 alter table student rename column student_email to email;
 alter table student rename column student_password to password;
@@ -127,16 +151,6 @@ rename column v_password to student_password;
 select * from student;
 select student_email,student_password from student;
 
-CREATE VIEW ProductsWithAttributesView AS
-SELECT      
-    products.Name as 'Products',
-    atr1.Value As 'Number of wheels',
-    atr2.Value As 'People',
-    atr3.Value As 'Engine'
-FROM Products AS products
-LEFT JOIN Attributes AS atr1 ON atr1.ProductId = products.Id AND atr1.DefinitionId = 1
-LEFT JOIN Attributes AS atr2 ON atr2.ProductId = products.Id AND atr2.DefinitionId = 2
-LEFT JOIN Attributes AS atr3 ON atr3.ProductId = products.Id AND atr3.DefinitionId = 3
 
 create view currentuser as
 select 
@@ -165,6 +179,7 @@ phno bigint
 );
 drop table users;
 
+select * from admin union select * from faculty union select * from student;
 
 
 /*CONTACT US*/
@@ -178,7 +193,7 @@ message varchar(255)
 );
 select * from contactus;
 delete * from contactus;
-
+truncate table contactus;
 /*REGISTER NEW USERS / ACCNT REQUESTS*/
 
 
@@ -194,7 +209,7 @@ password varchar(255),
 phno bigint
 );
 select * from request;
-
+truncate table request;
 alter table request rename column section to position;
 
 drop table request;
@@ -210,6 +225,25 @@ department varchar(255),
 permission int
 );
 select * from allkey;
+
+delimiter //
+Create Trigger after_insert_allkey
+AFTER INSERT ON allkey FOR EACH ROW  
+BEGIN  
+
+INSERT INTO vault VALUES (new.id, current_time()); 
+
+END // 
+
+insert into allkey values
+(
+11,
+"Computer Lab",
+"MCA",
+1
+);
+
+delete from allkey where id=21;
 drop table allkey;
 
 
@@ -221,20 +255,29 @@ create table alltransactions
 id int,
 name varchar(255),
 key_id int,
+Date date,
+Time time,
 status varchar(255)
 );
+drop table alltransactions;
 select * from alltransactions;
 delete from alltransactions where id = 2247238 and status = "Returned";
 
+truncate table alltransactions;
+
 create table keystaken
 (
-reg_no int primary key,
+reg_no int,
 key_id int,
+Date  date,
 Time_taken varchar(255)
  );
  select * from keystaken;
-
+delete from keystaken where reg_no=2247214;
 drop table keystaken;
+truncate table keystaken;
+
+
 
 delimiter //
 Create Trigger after_insert_keystaken
@@ -259,22 +302,38 @@ END //
 
 insert into keystaken values
 (
-2247234,
-13,
+2247214,
+12,
+"2022-04-16",
 current_time()
 );
-
+truncate table keysreturned;
 
 create table keysreturned
 (
-reg_no int primary key,
+reg_no int,
 key_id int,
+Date  date,
 Time_taken varchar(255),
-duration time,
-FOREIGN KEY (reg_no) REFERENCES keystaken(reg_no)
+duration time
 );
 drop table keysreturned;
 
+delimiter //
+Create Trigger before_insert_keysreturned
+before INSERT ON keysreturned FOR EACH ROW  
+BEGIN  
+
+if (SELECT reg_no FROM keystaken WHERE reg_no=new.reg_no)=new.reg_no
+then
+INSERT INTO keysreturned VALUES(new.reg_no,new.key_id,new.date,new.time_taken,new.duration);
+end if;
+END // 
+
+
+truncate table keysreturned;
+desc keystaken;
+desc keysreturned;
 delimiter //
 Create Trigger after_insert_keysreturned
 AFTER INSERT ON keysreturned FOR EACH ROW  
@@ -287,22 +346,41 @@ INSERT INTO alltransactions VALUES(new.reg_no,username, new.key_id,"Returned");
 
 END // 
 
+
 insert into keysreturned values
 (
-2247234,
-13,
+2247214,
+(Select key_id FROM keystaken WHERE reg_no = 2247214),
+CURRENT_DATE(),
 current_time,
-TIMEDIFF(Current_Time(),
-   (Select Time_taken FROM keystaken WHERE reg_no=2247234))
+TIMEDIFF(Current_Time(),(Select Time_taken FROM keystaken WHERE reg_no=2247214))
 );
-Select TIMEDIFF(Current_Time(),
-   (Select Time_taken FROM keystaken WHERE reg_no=2247234));
+truncate table keysreturned;
+truncate table keystaken;
 
-(SELECT CURRENT_TIME()- Time_taken FROM keystaken WHERE reg_no=2247234) as origianl_time;
-Select CURRENT_TIME();
+insert into keysreturned values(2247214,
+(Select key_id FROM keystaken WHERE reg_no = 2247214),
+CURRENT_DATE(),
+Current_Time,
+TIMEDIFF(Current_Time(),(Select Time_taken FROM keystaken WHERE reg_no = 2247214))
+);
+
+
+
+insert into keysreturned values(
+2247214,
+(Select key_id FROM keystaken WHERE reg_no = 2247214),
+CURRENT_DATE,
+Current_Time,
+TIMEDIFF(Current_Time(),(Select Time_taken FROM keystaken WHERE reg_no = 2247214))
+);
+
+
 
 desc keysreturned;
-delete from keysreturned where reg_no=2247238;
+select * from keysreturned;
+
+delete from keysreturned where reg_no=2247214;
 create table keysoverdue
 (
 reg_no int primary key,
@@ -310,6 +388,8 @@ key_id int,
 Time_taken varchar(255),
 duration time
 );
+
+
 
 /*RFID PERMISSIONS*/
 
@@ -323,8 +403,21 @@ usertime time
 );
 drop table rfidperm;
 select * from rfidperm;
-
+delete from rfidperm where id = 2247146;
 drop table rfidperm;
+truncate table rfidperm;
+
+select * from admin union select * from faculty union select * from student;
+
+truncate table rfidperm;
+insert into rfidperm values
+(
+2247242,
+1,
+current_date,
+current_time
+);
+
 
 /*ALERTS*/
 
@@ -346,7 +439,14 @@ create table vault
 (
 key_id int primary key not null,
 time_taken time,
-keys_left_present int,
 foreign key (key_id) references allkey(id)
 );
 
+insert into vault values
+(
+13,
+current_time());
+
+drop table vault;
+
+delete from vault where key_id=21;

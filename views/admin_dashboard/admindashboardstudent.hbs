@@ -32,6 +32,14 @@
 
   </head>
 
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        } 
+    </style>
+
 <body>
 
   <!-- ======= Header ======= -->
@@ -74,7 +82,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="/adashboard">
+        <a class="nav-link " href="/dashboard">
           <i class="bi bi-grid"></i>
           <span>Admin Dashboard</span>
         </a>
@@ -119,12 +127,7 @@
           <i class="bi bi-bar-chart"></i><span>Notifications</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/adashboard/alerts">
-              <i class="bi bi-circle"></i><span>Alerts</span>
-            </a>
-          </li>
-          <li>
+          
             <a href="/adashboard/vault">
               <i class="bi bi-circle"></i><span>Vault Condition</span>
             </a>
@@ -175,11 +178,7 @@
               <i class="bi bi-circle"></i><span>Keys Returned</span>
             </a>
           </li>
-          <li>
-            <a href="/adashboard/overdue">
-              <i class="bi bi-circle"></i><span>Overdue Keys</span>
-            </a>
-          </li>
+          
         </ul>
       </li><!-- End Forms Nav -->
 
@@ -275,63 +274,17 @@
                 </div>
 
               </div>
-              <div class="btns" style="display:flex;">
-                <div id="show-add">
-                  <button type="submit" class="btn btn-primary"style="margin-right:1rem;">Add Student</button>
-                </div>
-                
+              <div class="btns"> 
                 <div id="show-del">
                   <button type="submit" class="btn btn-primary" >Delete Student</button>
                 </div>
               </div>
             </div><!-- End Recent Sales -->
-            <div class="popup">
-               <!-- No Labels Form -->
-              <form class="row g-3" action="/addstudent">
-
-              <div class="col-md-12">
-                  <input type="text" class="form-control" name="name" placeholder="Name">
-                </div>
-                <div class="col-md-6">
-                  <input type="number" class="form-control" name="id" placeholder="Registration No.">
-                </div>
-                <div class="col-md-6">
-                  <input type="text" class="form-control" name="department" placeholder="Student Department">
-                </div>
-                <div class="col-md-6">
-                  <input type="email" class="form-control" name="email" placeholder="Student Email">
-                </div>
-                <div class="col-md-6">
-                  <input type="password" class="form-control" name="pass" placeholder="Student Password">
-                </div>
-                <div class="col-md-6">
-                  <input type="text" class="form-control" name="position" placeholder="Student Section">
-                </div>
-                <div class="col-md-6">
-                  <input type="number" class="form-control" name="phno" placeholder="Student Phone Number">
-                </div>
-              
-                
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="reset" class="btn btn-secondary" id="close-add">Cancel</button>
-              
-                </div>
-
-
-                 {{#if mesg}}
-              <h3>Data Inserted</h3>
-            {{/if}}
-
-                {{#if checkmesg}}
-                <h3>Emailid or Phoneno already present!</h3>
-                {{/if}}
-              </form><!-- End No Labels Form -->
-            </div>
+            
             <div class="popupdel">
-              <form class="row g-3" action="/removestudent">
+              <form class="row g-3" action="/removestudent" name="myform" onsubmit="return validateform()">
                 <div class="col-12">
-                  <input type="number" class="form-control" name="id" placeholder="Student Registration Number">
+                  <input type="number" class="form-control" name="id" id="regno" placeholder="Student Registration Number" minlength="7" maxlength="7" min="0" max="2299999" required>
                 </div>
               
                 
@@ -367,13 +320,7 @@
   <script src="/js/dashboard.js"></script>
   <script src="/js/dashboard.js"></script>
   <script>
-    document.querySelector("#show-add")
-    .addEventListener("click",function(){
-      document.querySelector(".popup").classList.add("active");
-
-    });
-    document.querySelector("#close-add").addEventListener("click",function(){
-      document.querySelector(".popup").classList.remove("active"); })
+    
 
        document.querySelector("#show-del")
     .addEventListener("click",function(){

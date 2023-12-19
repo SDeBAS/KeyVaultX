@@ -74,7 +74,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="/adashboard">
+        <a class="nav-link " href="/dashboard">
           <i class="bi bi-grid"></i>
           <span>Admin Dashboard</span>
         </a>
@@ -119,12 +119,7 @@
           <i class="bi bi-bar-chart"></i><span>Notifications</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/adashboard/alerts">
-              <i class="bi bi-circle"></i><span>Alerts</span>
-            </a>
-          </li>
-          <li>
+          
             <a href="/adashboard/vault">
               <i class="bi bi-circle"></i><span>Vault Condition</span>
             </a>
@@ -175,11 +170,7 @@
               <i class="bi bi-circle"></i><span>Keys Returned</span>
             </a>
           </li>
-          <li>
-            <a href="/adashboard/overdue">
-              <i class="bi bi-circle"></i><span>Overdue Keys</span>
-            </a>
-          </li>
+          
         </ul>
       </li><!-- End Forms Nav -->
 
@@ -214,7 +205,35 @@
 
   <main id="main" class="main">
 
-    
+                  <script>
+                  function validateform() {
+                        var name = document.myform.name.value;
+                        var id=document.myform.id.value;
+                        var dept=document.myform.dept.value;
+                        var perm=document.myform.section.value;
+                        
+                        if (name == null || name == "") {
+                        alert("Name can't be blank");
+                        return false;
+                        }
+                        if (isNaN(id) || id=="" || id==null) {
+                            alert("Key id can't be blank");
+                            document.getElementById("id").innerHTML = "Enter Numeric value only";
+                            return false;
+                        }
+                        if(perm == null || perm == "")
+                        {
+                          alert("Key permission can't be blank");
+                          return false;
+                        }
+                        if (dept == null || dept == "") {
+                        alert("Department can't be blank");
+                        return false;
+                      }
+                     
+                   
+                      }
+                    </script>
 
     <section class="section dashboard">
       <div class="row">
@@ -228,18 +247,18 @@
               <h5 class="card-title">Add Keys</h5>
 
               <!-- No Labels Form -->
-              <form class="row g-3" action="/addkeys">
+              <form class="row g-3" action="/addkeys" name="myform" onsubmit="return validateform()">
                 <div class="col-md-12">
-                  <input type="number" class="form-control" name="id" placeholder="Key Id">
+                  <input type="number" class="form-control" name="id" id="id" placeholder="Key Id" required>
                 </div>
                 <div class="col-md-6">
-                  <input type="text" class="form-control" name="name" placeholder="Key Name">
+                  <input type="text" class="form-control" name="name" id="name" placeholder="Key Name" required>
                 </div>
                 <div class="col-md-6">
-                  <input type="text" class="form-control" name="department" placeholder="Key Department">
+                  <input type="text" class="form-control" name="department" id="dept" placeholder="Key Department" required>
                 </div>
                 <div class="col-12">
-                  <input type="number" class="form-control" name="permission" placeholder="Key Permission">
+                  <input type="number" class="form-control" name="permission" id="perm" placeholder="Key Permission" required>
                 </div>
               
                 

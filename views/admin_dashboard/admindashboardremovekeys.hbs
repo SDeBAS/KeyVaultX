@@ -119,11 +119,7 @@
           <i class="bi bi-bar-chart"></i><span>Notifications</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/adashboard/alerts">
-              <i class="bi bi-circle"></i><span>Alerts</span>
-            </a>
-          </li>
+          
           <li>
             <a href="/adashboard/vault">
               <i class="bi bi-circle"></i><span>Vault Condition</span>
@@ -175,11 +171,7 @@
               <i class="bi bi-circle"></i><span>Keys Returned</span>
             </a>
           </li>
-          <li>
-            <a href="/adashboard/overdue">
-              <i class="bi bi-circle"></i><span>Overdue Keys</span>
-            </a>
-          </li>
+          
         </ul>
       </li><!-- End Forms Nav -->
 
@@ -214,7 +206,17 @@
 
   <main id="main" class="main">
 
-    
+                  <script>
+                  function validateform() {
+                        var id = document.myform.id.value;
+                         if (isNaN(id) || id=="" || id==null) {
+                            alert("Key id can't be blank");
+                            document.getElementById("id").innerHTML = "Enter Numeric value only";
+                            return false;
+                        }
+                        return true;
+                  }
+                  </script>
 
     <section class="section dashboard">
       <div class="row">
@@ -228,9 +230,9 @@
               <h5 class="card-title">Remove Keys</h5>
 
               <!-- No Labels Form -->
-              <form class="row g-3" action="/removekeys">
+              <form class="row g-3" action="/removekeys" name="myform" onsubmit="return validateform()">
                 <div class="col-12">
-                  <input type="number" class="form-control" name="id" placeholder="Key Id">
+                  <input type="number" class="form-control" name="id" id="id" placeholder="Key Id" required>
                 </div>
               
                 

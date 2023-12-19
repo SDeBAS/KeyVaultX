@@ -27,6 +27,7 @@ const mysql = require("./connection").con
 
 //DECLARING STATIC FILES
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json()); // middleware to parse request body as JSON
 app.use(express.static('public'));
 //app.set('view engine', "ejs");
 app.set("view engine", "hbs");
@@ -75,6 +76,78 @@ app.get("/request", function (req, res) {
     res.render(path.join(__dirname + "/views/request"), { message: req.flash("message") })
 });
 
+app.post('/createnewuser/:id', (req, res) => {
+    const id = req.params.id; 
+    const user = req.body.type;
+    console.log(id,user);
+    
+    let qry2 = "select * from request where id = ?";
+                mysql.query(qry2, [id], (err, results) => {
+                    if (results.length > 0) 
+                    {
+                        
+                        if(user=="Faculty")
+                        {
+                            mysql.query("insert into faculty values(?,?,?,?,?,?,?)", [
+                                results[0].id,
+                                results[0].name,
+                                results[0].department,
+                                results[0].position,
+                                results[0].email,
+                                results[0].password,
+                                results[0].phno
+                            ], function (err, results) {
+                                if (results.affectedRows > 0) {
+                                    console.log("User Added");
+                                    mysql.query("delete from request where id = ?", [id], function (err, results) {
+                                        if (results.affectedRows > 0) {
+                                            console.log("User Deleted");
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                        else if(user=="Student")
+                        {
+                            mysql.query("insert into student values(?,?,?,?,?,?,?)", [
+                                results[0].id,
+                                results[0].name,
+                                results[0].department,
+                                results[0].position,
+                                results[0].email,
+                                results[0].password,
+                                results[0].phno
+                            ], function (err, results) {
+                                if (results.affectedRows > 0) {
+                                    console.log("User Added");
+                                    mysql.query("delete from request where id = ?", [id], function (err, results) {
+                                        if (results.affectedRows > 0) {
+                                            console.log("User Deleted");
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    }
+                    
+                })
+        
+});
+
+app.post('/deletenewuser/:id', (req, res) => {
+    const id = req.params.id;
+    const user = req.body.type;
+    console.log(id, user);
+
+    let qry2 = "delete from request where id = ?";
+    mysql.query(qry2, [id], (err, results) => {
+        if (results.affectedRows > 0) {
+
+            console.log("User Request Declined");
+            }
+        })
+});
+
 app.get("/contact", function (req, res) {
     res.render(path.join(__dirname + "/views/contact"), { message: req.flash("message") })
 });
@@ -84,7 +157,7 @@ app.get("/adashboard", function (req, res) {
 });
 
 app.get("/adashboard/allusers", function (req, res) {
-    let qry = "select * from users";
+    let qry = "select * from admin union select * from faculty union select * from student;";
     mysql.query(qry, (err, results) => {
         if (err) throw err
         else {
@@ -106,11 +179,11 @@ app.get("/adashboard/admin", function (req, res) {
 app.get("/addadmin", function (req, res) {
 
     // fetching data from form
-    const { id, name, department, email,phno,pass,position } = req.query
+    const { name, regno, dept, email, pass, position, phno } = req.query;
 
     // Sanitization XSS...
-    let qry = "select * from admin where admin_id=?";
-    mysql.query(qry, [id], (err, results) => {
+    let qry = "select * from admin where admin_id=?"
+    mysql.query(qry, [regno], (err, results) => {
         if (err)
             throw err
         else {
@@ -119,14 +192,21 @@ app.get("/addadmin", function (req, res) {
                 res.render("add", { checkmesg: true })
             } else {
 
+                console.log(regno);
+                console.log(name);
+                console.log(dept);
+                console.log(position);
+                console.log(email);
+                console.log(pass);
+                console.log(phno);
                 // insert query
-                let qry2 = "insert into admin values(?,?,?,?,?,?,?)";
-                mysql.query(qry2, [id, name, department,position, email,pass,phno], (err, results) => {
-                    if (results.affectedRows > 0) {
-                        
-                        res.redirect("/adashboard/admin")
-                    }
-                })
+                let qry2 = "insert into admin values(?,?,?,?,?,?,?)"
+                mysql.query(qry2, [regno, name, dept,position, email,pass,phno], (err, results) => {
+                        if (results.affectedRows > 0) {
+
+                            res.redirect("/adashboard/admin");
+                        }
+                    })
             }
         }
     })
@@ -134,10 +214,10 @@ app.get("/addadmin", function (req, res) {
 
 app.get("/removeadmin", (req, res) => {
 
-    const { id } = req.query;
+    const { regno } = req.query;
 
     let qry = "delete from admin where admin_id=?";
-    mysql.query(qry, [id], (err, results) => {
+    mysql.query(qry, [regno], (err, results) => {
         if (err) throw err
         else {
             if (results.affectedRows > 0) {
@@ -161,7 +241,7 @@ app.get("/adashboard/faculty", function (req, res) {
 app.get("/addfaculty", function (req, res) {
 
     // fetching data from form
-    const { id, name, department, email, phno, pass, position } = req.query
+    const { name, id, department, email, pass, position, phno } = req.query;
 
     // Sanitization XSS...
     let qry = "select * from faculty where faculty_id=?";
@@ -173,6 +253,7 @@ app.get("/addfaculty", function (req, res) {
             if (results.length > 0) {
                 res.render("add", { checkmesg: true })
             } else {
+
 
                 // insert query
                 let qry2 = "insert into faculty values(?,?,?,?,?,?,?)";
@@ -331,21 +412,28 @@ app.get("/adashboard/removekeys", function (req, res) {
 app.get("/removekeys", (req, res) => {
 
     const { id } = req.query;
+    console.log(id);
+    mysql.query("delete from vault where key_id = ?;",[id],(err,results)=>{
+        if(results.affectedRows>0)
+        {
+            console.log("Deleleted From Vault");
+            let qry = "delete from allkey where id=?";
+            mysql.query(qry, [id], (err, results) => {
+                if (err) throw err
+                else {
+                    if (results.affectedRows > 0) {
+                        res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardremovekeys"), { mesg1: true })
+                    } else {
 
-    let qry = "delete from allkey where key_id=?";
-    mysql.query(qry, [id], (err, results) => {
-        if (err) throw err
-        else {
-            if (results.affectedRows > 0) {
-                res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardremovekeys"), { mesg1: true})
-            } else {
+                        res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardremovekeys"), { mesg1: false })
 
-                res.render(path.join(__dirname + "/views/admin_dashboard/admindashboardremovekeys"), { mesg1: false})
+                    }
 
-            }
-
+                }
+            });
         }
-    });
+    })
+    
 });
 
 app.get("/adashboard/viewkeys", function (req, res) {
@@ -419,7 +507,14 @@ app.get("/adashboard/register", function (req, res) {
 });
 
 app.get("/vdashboard", function (req, res) {
-    res.render(path.join(__dirname + "/views/view_dashboard/viewdashboard"))
+    
+    let qry = "select * from vault";
+    mysql.query(qry, (err, results) => {
+        if (err) throw err
+        else {
+            res.render(path.join(__dirname + "/views/view_dashboard/viewdashboard"), { data: results })
+        }
+    });
 });
 
 
@@ -646,13 +741,10 @@ app.listen(5000, () => {
 });
 
 
-var num = 0;
 var backr;
-var ldr1 = 0;
-var ldr2 = 0;
-var ldr3 = 0
 var reg = 0;
 var perm=0;
+var count_keys=3;
 parser.on('data', function (data) {
     
     var back=data
@@ -667,33 +759,94 @@ parser.on('data', function (data) {
         backr=reg;
     }
 
-        mysql.query("SELECT lvl from rfidperm where id = ?", [backr], function (err, results, fields) {
+        mysql.query("SELECT lvl from rfidperm where id = ?;", [backr], function (err, results, fields) {
             if (results.length > 0) {
 
-                //console.log(ldr);
-                //console.log(results[0].lvl.toString())
                 port.write(results[0].lvl.toString())
                 perm = results[0].lvl.toString();
+                var backldr=ldr;
+                mysql.query("SELECT * from keystaken where reg_no = ?", [backr], function (err, results, fields) {
+                    if (results.length > 0) 
+                    {
+                        if (ldr == 110 || ldr == 120 || ldr == 130)
+                        {
+                        
+                                returnkeys(backr, ldr / 10);
+                                return;
+                            }
+                        
+                        }
+                        
+                    else
+                    {
 
-                //if (ldr1 > 0 && ldr2 > 0 && ld3>0 && backr > 0 && perm === '3') {
-                    console.log("User Authenticated");
-                    console.log(backr)
-                    console.log(ldr)
-                    console.log(results[0].lvl);
-                
+                        if (ldr == 110 || ldr == 120 || ldr == 130)
+                        {
+                            console.log("\n\nUser Authenticated");
+                            console.log("Registration Number : " + backr)
+                            console.log("PERMISSION LEVEL : " + perm);
+                            console.log("KEY STATUS : " + ldr);
+                            console.log(typeof (ldr));
 
+                            takekeys(backr,ldr/10);
+                            return;
+                        }
+                        
+                    }
+                    })
            }
-            else {
+            else 
+            {
                 console.log("User Not Found")
                 console.log("\n")
 
             }
-        })
-
-    res.clearCookie('title');
-
-    
+        })   
 });
+
+function takekeys(backr,ldr)
+{
+
+    mysql.query("select * from vault  where key_id=?", [ldr], function (err, results, fields) {
+        if (results.length > 0) {
+            mysql.query("delete from  vault where key_id = ?", [ldr], function (err, results, fields) {
+                if (results.affectedRows > 0) {
+                    console.log("Key Deleted from Vault  succesfully");
+                }
+            });
+
+            mysql.query("insert into keystaken values(?,?,Current_date(),Current_Time())", [backr, ldr], function (err, results, fields) {
+                if (results.affectedRows > 0) {
+                    console.log("Key Taken  succesfully");
+
+                }
+            });
+        }
+    });
+}
+function returnkeys(backr,ldr)
+{
+    mysql.query("select * from keysreturned where key_id=? and reg_no =?;", [ldr,backr ], function (err, results, fields) {
+        if(results.length>0)
+        {
+            console.log("Already Returned");
+            return;
+        }
+        else {
+    mysql.query("insert into keysreturned values(?,(Select key_id FROM keystaken WHERE reg_no = ?),CURRENT_DATE(),Current_Time,TIMEDIFF(Current_Time(),(Select Time_taken FROM keystaken WHERE reg_no = ?)));", [backr, backr, backr], function (err, results, fields) {
+        if (results.affectedRows > 0) {
+            console.log("Key Returned succesfully");
+            mysql.query("insert into vault values((Select key_id FROM keystaken WHERE reg_no = ?),Current_Time()); ", [backr], function (err, results, fields) {
+                if (results.affectedRows > 0) {
+                    console.log("Key Added succesfully");
+                }
+                return;
+            });
+        }
+    });
+    }
+});
+}
 
 
 

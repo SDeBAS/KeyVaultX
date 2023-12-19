@@ -65,6 +65,15 @@
         </div>
       </div>
 
+      <script>
+        function validateform() {
+          var pass=document.myform.section.value;
+          if (pass == null || pass == "") {
+                alert("Password can't be blank");
+                return false;
+                }
+              }
+            </script>
       <!-- Right Part Sidebar -->
       <div class="menu-right-part">
         <div class="header-logo">
@@ -107,7 +116,7 @@
             </div>
 
             <div class="one_half last cfh">
-              <form method="POST" class="contact-form">
+              <form method="POST" class="contact-form" name="myform" onsubmit="return validateform()">
                 <p>
                   <select name="users" id="users">
                     <option value="#" selected disabled>Select the type of user you are</option>
@@ -126,7 +135,7 @@
                 </p>
                 <p>
                   <input
-                    id="contact-email"
+                    id="pass"
                     type="password"
                     name="pass"
                     placeholder="Password"

@@ -7,8 +7,9 @@ const flash = require("connect-flash")
 const { SerialPort } = require('serialport')
 const nodemailer = require("nodemailer");
 require('dotenv').config();
-const { ReadlineParser } = require('@serialport/parser-readline')
-const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+
+// const { ReadlineParser } = require('@serialport/parser-readline')
+// const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
 var cors = require('cors')
 
 //--------------------------------------------------------------------------------------------------------------------------//
@@ -92,7 +93,7 @@ app.get("/adashboard/allusers", function (req, res) {
     });
 });
 
-app.get("/adashboard/a+dmin", function (req, res) {
+app.get("/adashboard/admin", function (req, res) {
     let qry = "select * from admin";
     mysql.query(qry, (err, results) => {
         if (err) throw err
@@ -632,7 +633,7 @@ app.post("/contact", encoder, function (req, res) {
 
 //--------------------------------------------------------------------------------------------------------------------------//
 
-
+/*
 
 //RFID
 const parser = port.pipe(new ReadlineParser({ delimiter: '\r' }));
@@ -700,7 +701,7 @@ parser.on('error', function (err) {
     console.log(err.message);
 });
 
-
+*/
 
 //--------------------------------------------------------------------------------------------------------------------------//
 

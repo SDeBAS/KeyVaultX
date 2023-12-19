@@ -3,10 +3,10 @@ const mysql = require("mysql");
 const connection = mysql.createPool({
     connectionLimit: 100, //important
     multipleStatements : true,
-    host: "localhost",
-    user: "root",
+    host: "keyvaultx.cwvqbjfrkce2.us-east-1.rds.amazonaws.com",
+    user: "admin",
     password: "debanjan",
-    database: "keyvaultx"
+    database: "KeyVaultX"
 });
 
 //connect to database
